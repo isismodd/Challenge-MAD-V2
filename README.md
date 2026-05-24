@@ -102,7 +102,6 @@ ClivoVet/
 
 - Node.js (versão 16 ou superior)
 - npm ou yarn
-- Expo CLI
 - Expo Go (no celular) ou emulador Android/iOS
 
 ### Passos para execução
