@@ -284,9 +284,9 @@ export default function ChatScreen() {
 
   const getTipoCor = (tipo: string) => {
     switch (tipo) {
+      case 'veterinario': return '#1e3a8a';
       case 'tutor': return '#2196F3';
-      case 'veterinario': return '#4CAF50';
-      default: return '#FF9800';
+      default: return '#10a599';
     }
   };
 
@@ -430,7 +430,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
   header: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#1e3a8a',
     padding: 20,
     paddingTop: 20,
     paddingBottom: 20,
@@ -492,7 +492,7 @@ const styles = StyleSheet.create({
   },
   petNome: {
     fontSize: 12,
-    color: '#4CAF50',
+    color: '#1e3a8a',
     marginBottom: 4,
     fontWeight: '500',
   },
@@ -555,7 +555,7 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     fontSize: 28,
-    color: '#4CAF50',
+    color: '#1e3a8a',
   },
   conversaAvatarContainer: {
     width: 45,
@@ -578,7 +578,7 @@ const styles = StyleSheet.create({
   },
   conversaPet: {
     fontSize: 12,
-    color: '#4CAF50',
+    color: '#1e3a8a',
   },
   conversaStatus: {
     fontSize: 12,
@@ -596,7 +596,7 @@ const styles = StyleSheet.create({
   },
   mensagemUsuario: {
     alignSelf: 'flex-end',
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#1e3a8a',
     borderBottomRightRadius: 4,
   },
   mensagemContato: {
@@ -643,7 +643,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
   sendButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#1e3a8a',
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 20,

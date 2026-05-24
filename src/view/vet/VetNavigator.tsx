@@ -38,16 +38,16 @@ export default function VetNavigator() {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarActiveTintColor: '#4CAF50',
+        tabBarActiveTintColor: '#3b82f6',
         tabBarInactiveTintColor: '#999',
         tabBarStyle: {
           backgroundColor: '#fff',
-          paddingBottom: 5,
+          paddingBottom: 29,
           paddingTop: 5,
-          height: 60,
+          height: 97,
         },
         headerStyle: {
-          backgroundColor: '#4CAF50',
+          backgroundColor: '#3b82f6',
         },
         headerTintColor: '#fff',
         headerTitleStyle: {
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   welcome: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#4CAF50',
+    color: '#1e3a8a',
     marginBottom: 10,
     textAlign: 'center',
   },

@@ -194,9 +194,9 @@ export default function ComunidadeScreen() {
 
   const getTipoCor = (tipo: string) => {
     switch (tipo) {
-      case 'veterinario': return '#4CAF50';
+      case 'veterinario': return '#1e3a8a';
       case 'tutor': return '#2196F3';
-      default: return '#FF9800';
+      default: return '#10a599';
     }
   };
 
@@ -283,7 +283,7 @@ export default function ComunidadeScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>🌐 Comunidade Veterinária</Text>
+        <Text style={styles.title}> Comunidade Veterinária</Text>
         <Text style={styles.subtitle}>Troque experiências com outros profissionais</Text>
       </View>
 
@@ -376,7 +376,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
   header: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#1e3a8a',
     padding: 20,
     paddingTop: 20,
     paddingBottom: 20,
@@ -407,7 +407,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'transparent',
   },
   tabAtiva: {
-    borderBottomColor: '#4CAF50',
+    borderBottomColor: '#1e3a8a',
   },
   tabText: {
     fontSize: 14,
@@ -415,7 +415,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   tabTextAtiva: {
-    color: '#4CAF50',
+    color: '#1e3a8a',
   },
   listContent: {
     padding: 15,
@@ -573,7 +573,7 @@ const styles = StyleSheet.create({
   comentarioAutor: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#4CAF50',
+    color: '#4f5ff5',
     marginBottom: 4,
   },
   comentarioTexto: {
@@ -608,7 +608,7 @@ const styles = StyleSheet.create({
     maxHeight: 80,
   },
   enviarButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#1e3a8a',
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 8,

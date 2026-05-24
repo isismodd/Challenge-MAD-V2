@@ -42,9 +42,9 @@ export default function TutorNavigator() {
         tabBarInactiveTintColor: '#999',
         tabBarStyle: {
           backgroundColor: '#fff',
-          paddingBottom: 5,
+          paddingBottom: 29,
           paddingTop: 5,
-          height: 60,
+          height: 97,
         },
         headerStyle: {
           backgroundColor: '#2196F3',

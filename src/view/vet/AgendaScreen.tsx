@@ -37,8 +37,8 @@ export default function AgendaScreen() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'agendada': return '#FF9800';
-      case 'realizada': return '#4CAF50';
+      case 'agendada': return '#0077ff';
+      case 'realizada': return '#00ceab';
       case 'cancelada': return '#f44336';
       default: return '#999';
     }
@@ -113,38 +113,60 @@ export default function AgendaScreen() {
       return;
     }
 
-    const nova: Consulta = {
-      id: Date.now().toString(),
-      animalId: Date.now().toString(),
-      animalNome: novaConsulta.animalNome,
-      animalEspecie: 'outro',
-      tutorId: Date.now().toString(),
-      tutorNome: novaConsulta.tutorNome,
-      veterinarioId: '1',
-      veterinarioNome: 'Dr. Carlos Silva',
-      data: novaConsulta.data,
-      horario: novaConsulta.horario,
-      status: 'agendada',
-      observacoes: novaConsulta.observacoes,
-    };
+    // Validar formato da data (DD/MM/AAAA)
+    const dataParts = novaConsulta.data.split('/');
+    if (dataParts.length === 3) {
+      const dataFormatada = `${dataParts[2]}-${dataParts[1]}-${dataParts[0]}`;
+      
+      const nova: Consulta = {
+        id: Date.now().toString(),
+        animalId: Date.now().toString(),
+        animalNome: novaConsulta.animalNome,
+        animalEspecie: 'outro',
+        tutorId: Date.now().toString(),
+        tutorNome: novaConsulta.tutorNome,
+        veterinarioId: '1',
+        veterinarioNome: 'Dr. Carlos Silva',
+        data: dataFormatada,
+        horario: novaConsulta.horario,
+        status: 'agendada',
+        observacoes: novaConsulta.observacoes,
+      };
 
-    setConsultas([...consultas, nova]);
-    setModalVisible(false);
-    setNovaConsulta({
-      animalNome: '',
-      tutorNome: '',
-      data: '',
-      horario: '',
-      observacoes: '',
-    });
-    Alert.alert('Sucesso', 'Consulta agendada!');
+      setConsultas([...consultas, nova]);
+      setModalVisible(false);
+      setNovaConsulta({
+        animalNome: '',
+        tutorNome: '',
+        data: '',
+        horario: '',
+        observacoes: '',
+      });
+      Alert.alert('Sucesso', 'Consulta agendada!');
+    } else {
+      Alert.alert('Erro', 'Formato de data inválido. Use DD/MM/AAAA');
+    }
+  };
+
+  const handleMudarData = (direction: 'anterior' | 'proximo') => {
+    const dataAtual = new Date(selectedDate);
+    if (direction === 'anterior') {
+      dataAtual.setDate(dataAtual.getDate() - 1);
+    } else {
+      dataAtual.setDate(dataAtual.getDate() + 1);
+    }
+    setSelectedDate(dataAtual.toISOString().split('T')[0]);
+  };
+
+  const handleDataInputChange = (text: string) => {
+    setSelectedDate(text);
   };
 
   const renderConsultaCard = ({ item }: { item: Consulta }) => (
     <View style={styles.card}>
       <View style={styles.cardHeader}>
         <View style={styles.headerLeft}>
-          <Text style={styles.horario}>⏰ {item.horario}</Text>
+          <Text style={styles.horario}>{item.horario}</Text>
           <View style={[styles.statusBadge, { backgroundColor: getStatusColor(item.status) }]}>
             <Text style={styles.statusText}>
               {getStatusIcon(item.status)} {getStatusText(item.status)}
@@ -167,13 +189,13 @@ export default function AgendaScreen() {
             style={[styles.actionButton, styles.realizarButton]}
             onPress={() => handleRealizarConsulta(item)}
           >
-            <Text style={styles.actionButtonText}>✅ Realizar</Text>
+            <Text style={styles.actionButtonText}>Realizar</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.actionButton, styles.cancelarButton]}
             onPress={() => handleCancelarConsulta(item)}
           >
-            <Text style={styles.actionButtonText}>❌ Cancelar</Text>
+            <Text style={styles.actionButtonText}>Cancelar</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -187,33 +209,42 @@ export default function AgendaScreen() {
         <Text style={styles.subtitle}>Gerencie suas consultas</Text>
       </View>
 
+      {/* Seletor de data melhorado */}
       <View style={styles.dateSelector}>
         <TouchableOpacity
           style={styles.dateButton}
-          onPress={() => {
-            const hoje = new Date();
-            const ontem = new Date(hoje);
-            ontem.setDate(hoje.getDate() - 1);
-            setSelectedDate(ontem.toISOString().split('T')[0]);
-          }}
+          onPress={() => handleMudarData('anterior')}
         >
           <Text style={styles.dateButtonText}>◀ Dia anterior</Text>
         </TouchableOpacity>
         
         <View style={styles.dateDisplay}>
-          <Text style={styles.dateDisplayText}>
-            {selectedDate.split('-').reverse().join('/')}
-          </Text>
+          <TextInput
+            style={styles.dateInput}
+            value={selectedDate.split('-').reverse().join('/')}
+            onChangeText={(text) => {
+              // Permite digitar a data manualmente
+              if (text.length === 2 || text.length === 5) {
+                setNovaConsulta(prev => ({ ...prev, data: text + '/' }));
+              } else {
+                // Atualiza a data selecionada quando o usuário terminar de digitar
+                const dataParts = text.split('/');
+                if (dataParts.length === 3) {
+                  const dataFormatada = `${dataParts[2]}-${dataParts[1]}-${dataParts[0]}`;
+                  setSelectedDate(dataFormatada);
+                }
+                setNovaConsulta(prev => ({ ...prev, data: text }));
+              }
+            }}
+            placeholder="DD/MM/AAAA"
+            keyboardType="numeric"
+            maxLength={10}
+          />
         </View>
         
         <TouchableOpacity
           style={styles.dateButton}
-          onPress={() => {
-            const hoje = new Date();
-            const amanha = new Date(hoje);
-            amanha.setDate(hoje.getDate() + 1);
-            setSelectedDate(amanha.toISOString().split('T')[0]);
-          }}
+          onPress={() => handleMudarData('proximo')}
         >
           <Text style={styles.dateButtonText}>Próximo dia ▶</Text>
         </TouchableOpacity>
@@ -232,6 +263,7 @@ export default function AgendaScreen() {
         renderItem={renderConsultaCard}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
+        extraData={consultas} // ← FORÇA ATUALIZAÇÃO QUANDO CONSULTAS MUDAM
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyIcon}>📅</Text>
@@ -322,15 +354,15 @@ export default function AgendaScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f5f5f5' },
-  header: { backgroundColor: '#FF9800', padding: 20, paddingTop: 20, paddingBottom: 20 },
+  header: { backgroundColor: '#60a5fa', padding: 20, paddingTop: 20, paddingBottom: 20 },
   title: { fontSize: 28, fontWeight: 'bold', color: '#fff' },
   subtitle: { fontSize: 14, color: '#fff', opacity: 0.9, marginTop: 5 },
   dateSelector: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#fff', padding: 15, borderBottomWidth: 1, borderBottomColor: '#eee' },
   dateButton: { paddingHorizontal: 15, paddingVertical: 8, backgroundColor: '#f0f0f0', borderRadius: 8 },
   dateButtonText: { fontSize: 12, color: '#666' },
-  dateDisplay: { backgroundColor: '#FF9800', paddingHorizontal: 20, paddingVertical: 8, borderRadius: 8 },
-  dateDisplayText: { fontSize: 14, fontWeight: 'bold', color: '#fff' },
-  novaConsultaButton: { backgroundColor: '#4CAF50', margin: 15, padding: 12, borderRadius: 8, alignItems: 'center' },
+  dateDisplay: { backgroundColor: '#3b82f6', paddingHorizontal: 20, paddingVertical: 8, borderRadius: 8, minWidth: 120, alignItems: 'center' },
+  dateInput: { fontSize: 14, fontWeight: 'bold', color: '#fff', textAlign: 'center', minWidth: 100 },
+  novaConsultaButton: { backgroundColor: '#1e3a8a', margin: 15, padding: 12, borderRadius: 8, alignItems: 'center' },
   novaConsultaButtonText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
   listContent: { padding: 15 },
   card: { backgroundColor: '#fff', borderRadius: 12, padding: 15, marginBottom: 15, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 3 },
@@ -345,13 +377,13 @@ const styles = StyleSheet.create({
   observacoes: { fontSize: 13, color: '#999', marginTop: 5, fontStyle: 'italic' },
   cardActions: { flexDirection: 'row', gap: 10, marginTop: 12, paddingTop: 12, borderTopWidth: 1, borderTopColor: '#eee' },
   actionButton: { flex: 1, paddingVertical: 8, borderRadius: 8, alignItems: 'center' },
-  realizarButton: { backgroundColor: '#4CAF50' },
+  realizarButton: { backgroundColor: '#00ceab' },
   cancelarButton: { backgroundColor: '#f44336' },
   actionButtonText: { color: '#fff', fontWeight: 'bold' },
   emptyContainer: { alignItems: 'center', padding: 40 },
   emptyIcon: { fontSize: 48, marginBottom: 10 },
   emptyText: { fontSize: 16, color: '#999', textAlign: 'center' },
-  emptyButton: { marginTop: 20, backgroundColor: '#FF9800', paddingHorizontal: 20, paddingVertical: 10, borderRadius: 8 },
+  emptyButton: { marginTop: 20, backgroundColor: '#1e3a8a', paddingHorizontal: 20, paddingVertical: 10, borderRadius: 8 },
   emptyButtonText: { color: '#fff', fontWeight: 'bold' },
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center' },
   modalContainer: { backgroundColor: '#fff', borderRadius: 20, padding: 20, width: '90%', maxHeight: '80%' },

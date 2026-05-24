@@ -55,7 +55,7 @@ const beneficiosMock: Beneficio[] = [
     tipo: 'desconto',
     validade: '31/12/2025',
     parceiro: 'VetCare',
-    cor: '#FF9800',
+    cor: '#019b4e',
   },
   {
     id: '4',
@@ -65,7 +65,7 @@ const beneficiosMock: Beneficio[] = [
     valor: 'R$ 49,90/mês',
     validade: 'Lançamento',
     parceiro: 'PetLove',
-    cor: '#9C27B0',
+    cor: '#028dff',
   },
   {
     id: '5',
@@ -74,7 +74,7 @@ const beneficiosMock: Beneficio[] = [
     tipo: 'desconto',
     validade: 'Sempre',
     parceiro: 'Farmácia Vet Popular',
-    cor: '#E91E63',
+    cor: '#00196b',
   },
   {
     id: '6',
@@ -241,7 +241,7 @@ export default function BeneficiosScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>🎁 Benefícios e Planos</Text>
+        <Text style={styles.title}>Benefícios e Planos</Text>
         <Text style={styles.subtitle}>Aproveite vantagens exclusivas para seu pet</Text>
       </View>
 
@@ -252,7 +252,7 @@ export default function BeneficiosScreen() {
           onPress={() => setAbaAtiva('beneficios')}
         >
           <Text style={[styles.tabText, abaAtiva === 'beneficios' && styles.tabTextAtiva]}>
-            🎁 Benefícios
+             Benefícios
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -260,7 +260,7 @@ export default function BeneficiosScreen() {
           onPress={() => setAbaAtiva('planos')}
         >
           <Text style={[styles.tabText, abaAtiva === 'planos' && styles.tabTextAtiva]}>
-            📋 Planos de Saúde
+             Planos de Saúde
           </Text>
         </TouchableOpacity>
       </View>
@@ -335,7 +335,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'transparent',
   },
   tabAtiva: {
-    borderBottomColor: '#410418',
+    borderBottomColor: '#061a86',
   },
   tabText: {
     fontSize: 14,
@@ -343,7 +343,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   tabTextAtiva: {
-    color: '#E91E63',
+    color: '#1e3a8a',
   },
   listContent: {
     padding: 15,
@@ -398,7 +398,7 @@ const styles = StyleSheet.create({
   beneficioValor: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#4CAF50',
+    color: '#009b05',
   },
   beneficioValidade: {
     fontSize: 12,
@@ -428,14 +428,14 @@ const styles = StyleSheet.create({
   },
   planoCardDestaque: {
     borderWidth: 2,
-    borderColor: '#FFD700',
+    borderColor: '#01ffc0',
     transform: [{ scale: 1.02 }],
   },
   destaqueBadge: {
     position: 'absolute',
     top: -10,
     right: 20,
-    backgroundColor: '#FFD700',
+    backgroundColor: '#01ffc0',
     paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 20,
@@ -485,7 +485,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   contratarButtonDestaque: {
-    backgroundColor: '#e4ba00',
+    backgroundColor: '#01ffc0',
   },
   contratarButtonText: {
     fontSize: 16,

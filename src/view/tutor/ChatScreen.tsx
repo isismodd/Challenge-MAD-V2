@@ -68,16 +68,6 @@ const contatosMock: Contato[] = [
   },
   {
     id: '4',
-    nome: 'Grupo de Cachorros',
-    avatar: '🐕',
-    tipo: 'tutor',
-    ultimaMensagem: 'Alguém tem dica de adestramento?',
-    horario: 'Ontem',
-    naoLidas: 5,
-    online: false,
-  },
-  {
-    id: '5',
     nome: 'Grupo de Gatos',
     avatar: '🐈',
     tipo: 'tutor',
@@ -85,7 +75,7 @@ const contatosMock: Contato[] = [
     horario: '15/05',
     naoLidas: 0,
     online: false,
-  },
+  }
 ];
 
 // Mensagens mockadas por conversa
@@ -241,9 +231,9 @@ export default function ChatScreen() {
 
   const getTipoCor = (tipo: string) => {
     switch (tipo) {
-      case 'veterinario': return '#4CAF50';
+      case 'veterinario': return '#1e3a8a';
       case 'tutor': return '#2196F3';
-      default: return '#FF9800';
+      default: return '#10a599';
     }
   };
 
@@ -543,7 +533,7 @@ const styles = StyleSheet.create({
   },
   conversaEspecialidade: {
     fontSize: 12,
-    color: '#4CAF50',
+    color: '#0816dd',
   },
   conversaStatus: {
     fontSize: 12,

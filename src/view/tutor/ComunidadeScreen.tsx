@@ -88,20 +88,7 @@ const postsMock: Post[] = [
     data: '2025-05-17T14:45:00',
     curtidoPorUsuario: false,
     categoria: 'artigo',
-  },
-  {
-    id: '5',
-    autor: 'Carlos Mendes',
-    autorAvatar: '🐕',
-    tipo: 'tutor',
-    titulo: 'Meu cachorro aprendeu a sentar!',
-    conteudo: 'Depois de 2 semanas treinando, o Rex finalmente aprendeu a sentar! Estou muito feliz com o progresso dele. Compartilhem as conquistas de vocês também!',
-    curtidas: 56,
-    comentarios: 9,
-    data: '2025-05-16T19:30:00',
-    curtidoPorUsuario: true,
-    categoria: 'dica',
-  },
+  }
 ];
 
 // Comentários mockados
@@ -181,9 +168,9 @@ export default function ComunidadeScreen() {
 
   const getTipoCor = (tipo: string) => {
     switch (tipo) {
-      case 'veterinario': return '#4CAF50';
+      case 'veterinario': return '#1e3a8a';
       case 'tutor': return '#2196F3';
-      default: return '#FF9800';
+      default: return '#10a599';
     }
   };
 
@@ -277,7 +264,7 @@ export default function ComunidadeScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>🌐 Comunidade Clivo Vet</Text>
+        <Text style={styles.title}>Comunidade Clivo Vet</Text>
         <Text style={styles.subtitle}>Troque experiências com outros tutores e veterinários</Text>
       </View>
 
@@ -370,7 +357,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
   header: {
-    backgroundColor: '#FF9800',
+    backgroundColor: '#1e3a8a',
     padding: 20,
     paddingTop: 20,
     paddingBottom: 20,
@@ -401,7 +388,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'transparent',
   },
   tabAtiva: {
-    borderBottomColor: '#FF9800',
+    borderBottomColor: '#1e3a8a',
   },
   tabText: {
     fontSize: 14,
@@ -409,7 +396,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   tabTextAtiva: {
-    color: '#FF9800',
+    color: '#1e3a8a',
   },
   listContent: {
     padding: 15,
@@ -613,7 +600,7 @@ const styles = StyleSheet.create({
     maxHeight: 80,
   },
   enviarButton: {
-    backgroundColor: '#FF9800',
+    backgroundColor: '#1e3a8a',
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 8,
