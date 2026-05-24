@@ -1,3 +1,4 @@
+// src/view/tutor/CadastroAnimaisScreen.tsx
 import React, { useState } from 'react';
 import {
   View,
@@ -8,7 +9,9 @@ import {
   ScrollView,
   Alert,
   Switch,
-} from 'react-native';
+} 
+from 'react-native';
+import { useAnimais, Animal } from '../../control/AnimalContext';
 
 type AnimalFormData = {
   nome: string;
@@ -21,6 +24,7 @@ type AnimalFormData = {
 };
 
 export default function CadastroAnimaisScreen() {
+  const { adicionarAnimal } = useAnimais(); // ← USAR O CONTEXT
   const [formData, setFormData] = useState<AnimalFormData>({
     nome: '',
     especie: 'cachorro',
@@ -31,8 +35,6 @@ export default function CadastroAnimaisScreen() {
     observacoes: '',
   });
 
-  const [animaisCadastrados, setAnimaisCadastrados] = useState<any[]>([]);
-
   const handleChange = (field: keyof AnimalFormData, value: string | boolean) => {
     setFormData(prev => ({
       ...prev,
@@ -41,7 +43,6 @@ export default function CadastroAnimaisScreen() {
   };
 
   const handleSalvar = () => {
-    // Validações
     if (!formData.nome.trim()) {
       Alert.alert('Erro', 'Por favor, informe o nome do pet');
       return;
@@ -59,16 +60,19 @@ export default function CadastroAnimaisScreen() {
       return;
     }
 
-    const novoAnimal = {
+    const novoAnimal: Animal = {
       id: Date.now().toString(),
-      ...formData,
+      nome: formData.nome,
+      especie: formData.especie,
+      raca: formData.raca,
       idade: Number(formData.idade),
       peso: Number(formData.peso),
+      vacinasEmDia: formData.vacinasEmDia,
+      observacoes: formData.observacoes,
     };
 
-    setAnimaisCadastrados(prev => [novoAnimal, ...prev]);
+    adicionarAnimal(novoAnimal); // ← SALVA NO CONTEXT GLOBAL
     
-    // Limpar formulário
     setFormData({
       nome: '',
       especie: 'cachorro',
@@ -94,24 +98,15 @@ export default function CadastroAnimaisScreen() {
     });
   };
 
-  const getEspecieIcon = (especie: string) => {
-    switch (especie) {
-      case 'cachorro': return '🐕';
-      case 'gato': return '🐈';
-      default: return '🐾';
-    }
-  };
-
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View style={styles.header}>
-        <Text style={styles.title}>Cadastrar Pet</Text>
+        <Text style={styles.title}>📝 Cadastrar Pet</Text>
         <Text style={styles.subtitle}>Adicione um novo animal ao seu perfil</Text>
       </View>
 
       <View style={styles.formCard}>
         <Text style={styles.sectionTitle}>Informações do Pet</Text>
-
 
         <Text style={styles.label}>Nome do pet *</Text>
         <TextInput
@@ -120,7 +115,6 @@ export default function CadastroAnimaisScreen() {
           value={formData.nome}
           onChangeText={(text) => handleChange('nome', text)}
         />
-
 
         <Text style={styles.label}>Espécie *</Text>
         <View style={styles.especieContainer}>
@@ -163,7 +157,6 @@ export default function CadastroAnimaisScreen() {
           onChangeText={(text) => handleChange('raca', text)}
         />
 
-
         <View style={styles.row}>
           <View style={styles.rowItem}>
             <Text style={styles.label}>Idade (anos) *</Text>
@@ -187,7 +180,6 @@ export default function CadastroAnimaisScreen() {
             />
           </View>
         </View>
-
 
         <View style={styles.switchContainer}>
           <Text style={styles.label}>Vacinas em dia?</Text>
@@ -219,29 +211,6 @@ export default function CadastroAnimaisScreen() {
           </TouchableOpacity>
         </View>
       </View>
-
-
-      {animaisCadastrados.length > 0 && (
-        <View style={styles.listCard}>
-          <Text style={styles.sectionTitle}>✅ Pets cadastrados (nesta sessão)</Text>
-          {animaisCadastrados.map((animal) => (
-            <View key={animal.id} style={styles.animalItem}>
-              <Text style={styles.animalIcon}>{getEspecieIcon(animal.especie)}</Text>
-              <View style={styles.animalInfo}>
-                <Text style={styles.animalNome}>{animal.nome}</Text>
-                <Text style={styles.animalDetalhes}>
-                  {animal.raca} • {animal.idade} anos • {animal.peso} kg
-                </Text>
-                {animal.vacinasEmDia ? (
-                  <Text style={styles.vacinasOk}>✅ Vacinas em dia</Text>
-                ) : (
-                  <Text style={styles.vacinasWarning}>⚠️ Vacinas atrasadas</Text>
-                )}
-              </View>
-            </View>
-          ))}
-        </View>
-      )}
     </ScrollView>
   );
 }
@@ -271,18 +240,6 @@ const styles = StyleSheet.create({
   formCard: {
     backgroundColor: '#fff',
     margin: 15,
-    padding: 20,
-    borderRadius: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  listCard: {
-    backgroundColor: '#fff',
-    margin: 15,
-    marginTop: 0,
     padding: 20,
     borderRadius: 12,
     shadowColor: '#000',
@@ -390,40 +347,5 @@ const styles = StyleSheet.create({
     color: '#666',
     fontWeight: 'bold',
     fontSize: 16,
-  },
-  animalItem: {
-    flexDirection: 'row',
-    backgroundColor: '#f8f9fa',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 10,
-    alignItems: 'center',
-  },
-  animalIcon: {
-    fontSize: 36,
-    marginRight: 12,
-  },
-  animalInfo: {
-    flex: 1,
-  },
-  animalNome: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  animalDetalhes: {
-    fontSize: 12,
-    color: '#666',
-    marginTop: 2,
-  },
-  vacinasOk: {
-    fontSize: 12,
-    color: '#4CAF50',
-    marginTop: 2,
-  },
-  vacinasWarning: {
-    fontSize: 12,
-    color: '#6e0d00',
-    marginTop: 2,
   },
 });

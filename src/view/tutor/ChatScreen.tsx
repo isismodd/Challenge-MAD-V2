@@ -359,7 +359,7 @@ export default function ChatScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>💬 Conversas</Text>
+        <Text style={styles.title}>Conversas</Text>
         <Text style={styles.subtitle}>Mensagens com veterinários e outros tutores</Text>
       </View>
 

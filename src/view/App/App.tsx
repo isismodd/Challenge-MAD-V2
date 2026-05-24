@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { AuthProvider, useAuth } from '../../control/AuthContext';
 import { View, ActivityIndicator } from 'react-native';
+import { AnimalProvider } from '../../control/AnimalContext';
 
 import LoginScreen from '../../view/login/LoginScreen';
 import VetNavigator from '../../view/vet/VetNavigator';
@@ -38,9 +39,11 @@ function AppNavigator() {
 export default function App() {
   return (
     <AuthProvider>
+      <AnimalProvider> 
       <NavigationContainer>
         <AppNavigator />
       </NavigationContainer>
+      </AnimalProvider>
     </AuthProvider>
   );
 }
