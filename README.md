@@ -115,16 +115,16 @@ cd clivo-vet
 
 ```
 npm install --legacy-peer-deps
-Instale as dependências do Expo
 ```
-
+3. Instale as dependências do Expo
+   
 ```
 npx expo install react-native-screens react-native-safe-area-context
 npx expo install @react-native-async-storage/async-storage
 npx expo install react-native-gesture-handler
 ```
-3. Inicie o projeto
-4. 
+4. Inicie o projeto
+
 ```
 npx run android
 ```
