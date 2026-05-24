@@ -1,4 +1,3 @@
-// src/view/tutor/ChatScreen.tsx
 import React, { useState } from 'react';
 import {
   View,

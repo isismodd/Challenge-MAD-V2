@@ -1,4 +1,3 @@
-// src/view/tutor/TutorNavigator.tsx
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { View, Text, Button, StyleSheet } from 'react-native';

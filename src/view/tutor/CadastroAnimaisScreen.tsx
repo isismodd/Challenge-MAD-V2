@@ -24,7 +24,7 @@ type AnimalFormData = {
 };
 
 export default function CadastroAnimaisScreen() {
-  const { adicionarAnimal } = useAnimais(); // ← USAR O CONTEXT
+  const { adicionarAnimal } = useAnimais(); 
   const [formData, setFormData] = useState<AnimalFormData>({
     nome: '',
     especie: 'cachorro',
@@ -71,7 +71,7 @@ export default function CadastroAnimaisScreen() {
       observacoes: formData.observacoes,
     };
 
-    adicionarAnimal(novoAnimal); // ← SALVA NO CONTEXT GLOBAL
+    adicionarAnimal(novoAnimal); 
     
     setFormData({
       nome: '',

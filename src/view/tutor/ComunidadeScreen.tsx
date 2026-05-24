@@ -1,4 +1,3 @@
-// src/view/tutor/ComunidadeScreen.tsx
 import React, { useState } from 'react';
 import {
   View,
