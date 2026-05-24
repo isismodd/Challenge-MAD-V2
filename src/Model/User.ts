@@ -1,3 +1,4 @@
+// src/model/User.ts
 export type User = {
   id: string;
   nome: string;
@@ -6,21 +7,19 @@ export type User = {
   token: string;
 };
 
-// Tipo para Veterinário (extensão de User)
 export type Veterinario = User & {
   especialidade: string;
-  crv: string; // Registro no Conselho Regional de Veterinária
+  crv: string;
   telefone?: string;
 };
 
-// Tipo para Tutor (extensão de User)
 export type Tutor = User & {
   telefone: string;
   endereco?: string;
   cpf?: string;
 };
 
-// Dados mockados para teste
+// Dados mockados
 export const mockVeterinario: Veterinario = {
   id: '1',
   nome: 'Dr. Carlos Silva',

@@ -1,21 +1,160 @@
-// src/view/vet/VetNavigator.tsx
+
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View, Text } from 'react-native';
+import { View, Text, Button, StyleSheet } from 'react-native';
+import { useAuth } from '../../control/AuthContext';
+
+// Importação das telas completas
+import perfilAnimaisScreen from './perfilAnimaisScreen';
+import AgendaScreen from './AgendaScreen';
+import SaudePreventivaScreen from './SaudePreventivaScreen';
+import ChatScreen from './ChatScreen';
+import ComunidadeScreen from './ComunidadeScreen';
 
 const Tab = createBottomTabNavigator();
 
-// Telas placeholder
-const PerfilAnimais = () => <View><Text>Perfil dos Animais</Text></View>;
-const Agenda = () => <View><Text>Agenda</Text></View>;
-const Chat = () => <View><Text>Chat</Text></View>;
+// Tela Início com informações do usuário e logout
+function HomeScreen() {
+  const { user, logout } = useAuth();
+  
+  return (
+    <View style={styles.container}>
+      <Text style={styles.welcome}>Bem-vindo, {user?.nome || 'Veterinário'}! 👋</Text>
+      <Text style={styles.subtitle}>Você está logado como VETERINÁRIO</Text>
+      
+      <View style={styles.infoBox}>
+        <Text style={styles.infoText}>📧 {user?.email || 'vet@clivovet.com'}</Text>
+        <Text style={styles.infoText}>🎫 {user?.token?.substring(0, 25) || 'mock-token-vet'}...</Text>
+      </View>
+      
+      <View style={styles.logoutButton}>
+        <Button title="Sair do App" onPress={logout} color="#ff4444" />
+      </View>
+    </View>
+  );
+}
 
 export default function VetNavigator() {
   return (
-    <Tab.Navigator>
-      <Tab.Screen name="Animais" component={PerfilAnimais} />
-      <Tab.Screen name="Agenda" component={Agenda} />
-      <Tab.Screen name="Chat" component={Chat} />
+    <Tab.Navigator
+      screenOptions={{
+        tabBarActiveTintColor: '#4CAF50',
+        tabBarInactiveTintColor: '#999',
+        tabBarStyle: {
+          backgroundColor: '#fff',
+          paddingBottom: 5,
+          paddingTop: 5,
+          height: 60,
+        },
+        headerStyle: {
+          backgroundColor: '#4CAF50',
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      }}
+    >
+      <Tab.Screen 
+        name="Início" 
+        component={HomeScreen}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Text style={{ fontSize: 22 }}>{focused ? '🏠' : '🏠'}</Text>
+          ),
+        }}
+      />
+      <Tab.Screen 
+        name="Animais" 
+        component={perfilAnimaisScreen}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Text style={{ fontSize: 22 }}>{focused ? '🐕' : '🐕'}</Text>
+          ),
+        }}
+      />
+      <Tab.Screen 
+        name="Agenda" 
+        component={AgendaScreen}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Text style={{ fontSize: 22 }}>{focused ? '📅' : '📅'}</Text>
+          ),
+        }}
+      />
+      <Tab.Screen 
+        name="Saúde" 
+        component={SaudePreventivaScreen}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Text style={{ fontSize: 22 }}>{focused ? '💉' : '💉'}</Text>
+          ),
+        }}
+      />
+      <Tab.Screen 
+        name="Chat" 
+        component={ChatScreen}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Text style={{ fontSize: 22 }}>{focused ? '💬' : '💬'}</Text>
+          ),
+        }}
+      />
+      <Tab.Screen 
+        name="Comunidade" 
+        component={ComunidadeScreen}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Text style={{ fontSize: 22 }}>{focused ? '🌐' : '🌐'}</Text>
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+    backgroundColor: '#f5f5f5',
+  },
+  welcome: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#4CAF50',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  infoBox: {
+    backgroundColor: '#fff',
+    padding: 15,
+    borderRadius: 10,
+    marginTop: 20,
+    marginBottom: 30,
+    width: '100%',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  infoText: {
+    fontSize: 14,
+    color: '#333',
+    marginVertical: 3,
+  },
+  logoutButton: {
+    marginTop: 20,
+    width: '80%',
+  },
+});

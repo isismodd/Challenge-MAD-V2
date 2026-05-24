@@ -3,41 +3,35 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { useAuth } from '../../control/AuthContext';
 
-export default function LoginScreen({ navigation }: any) {
+export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
-  const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, loading } = useAuth();
 
-  const handleLogin = async (tipo: 'vet' | 'tutor') => {
+  const handleLogin = async () => {
     if (!email || !senha) {
       Alert.alert('Erro', 'Preencha email e senha');
       return;
     }
 
-    setLoading(true);
-    const success = await login(email, senha, tipo);
-    setLoading(false);
-
-    if (success) {
-      navigation.replace('SelecaoPerfil');
-    } else {
+    const success = await login(email, senha);
+    if (!success) {
       Alert.alert('Erro', 'Email ou senha inválidos');
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>🐾 Clivo Vet</Text>
-      <Text style={styles.subtitle}>Bem-vindo ao seu app veterinário</Text>
+      <Text style={styles.title}>Clivo Vet</Text>
+      <Text style={styles.subtitle}>Bem-vindo!</Text>
 
       <TextInput
         style={styles.input}
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
-        keyboardType="email-address"
         autoCapitalize="none"
+        keyboardType="email-address"
       />
 
       <TextInput
@@ -48,24 +42,18 @@ export default function LoginScreen({ navigation }: any) {
         secureTextEntry
       />
 
-      {loading ? (
-        <ActivityIndicator size="large" color="#4CAF50" />
-      ) : (
-        <>
-          <TouchableOpacity style={[styles.button, styles.buttonVet]} onPress={() => handleLogin('vet')}>
-            <Text style={styles.buttonText}>Entrar como Veterinário</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={[styles.button, styles.buttonTutor]} onPress={() => handleLogin('tutor')}>
-            <Text style={styles.buttonText}>Entrar como Tutor</Text>
-          </TouchableOpacity>
-        </>
-      )}
+      <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
+        {loading ? (
+          <ActivityIndicator color="#fff" />
+        ) : (
+          <Text style={styles.buttonText}>Entrar</Text>
+        )}
+      </TouchableOpacity>
 
       <Text style={styles.demoText}>
-        Demo: use qualquer email/senha{'\n'}
-        Vet: vet@clivovet.com | Tutor: tutor@clivovet.com{'\n'}
-        Mínimo 3 caracteres na senha
+        Demonstração:{'\n'}
+        Veterinário: vet@clivovet.com | qualquer senha{'\n'}
+        Tutor: tutor@clivovet.com | qualquer senha
       </Text>
     </View>
   );
@@ -75,52 +63,44 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
     padding: 20,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#d7edfa',
   },
   title: {
-    fontSize: 36,
+    fontSize: 32,
     fontWeight: 'bold',
-    color: '#4CAF50',
+    color: '#60a5fa',
+    textAlign: 'center',
     marginBottom: 10,
   },
   subtitle: {
     fontSize: 16,
-    color: '#666',
+    color: '#666666',
+    textAlign: 'center',
     marginBottom: 40,
   },
   input: {
-    width: '100%',
-    height: 50,
     borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 10,
-    paddingHorizontal: 15,
+    borderColor: '#1e3a8a',
+    padding: 12,
     marginBottom: 15,
-    backgroundColor: '#fff',
+    borderRadius: 8,
+    fontSize: 16,
   },
   button: {
-    width: '100%',
-    height: 50,
-    borderRadius: 10,
-    justifyContent: 'center',
+    backgroundColor: '#1e3a8a',
+    padding: 15,
+    borderRadius: 8,
     alignItems: 'center',
-    marginBottom: 15,
-  },
-  buttonVet: {
-    backgroundColor: '#4CAF50',
-  },
-  buttonTutor: {
-    backgroundColor: '#2196F3',
+    marginTop: 10,
   },
   buttonText: {
     color: '#fff',
-    fontSize: 16,
     fontWeight: 'bold',
+    fontSize: 16,
   },
   demoText: {
-    marginTop: 20,
+    marginTop: 40,
     textAlign: 'center',
     fontSize: 12,
     color: '#999',
