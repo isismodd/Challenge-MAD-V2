@@ -9,11 +9,13 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@react-native-async-storage/async-storage": "^2.2.0",
+    "@react-native-async-storage/async-storage": "2.2.0",
     "@react-navigation/bottom-tabs": "^7.16.1",
     "@react-navigation/native": "^7.2.4",
     "@react-navigation/stack": "^7.9.2",
-    "expo": "~54.0.33",
+    "@tanstack/react-query": "^5.102.8",
+    "axios": "^1.20.0",
+    "expo": "~54.0.37",
     "expo-status-bar": "~3.0.9",
     "react": "19.1.0",
     "react-dom": "19.1.0",

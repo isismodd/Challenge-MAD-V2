@@ -1,400 +1,123 @@
-// src/view/vet/AgendaScreen.tsx
-import React, { useState } from 'react';
+import React from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  Modal,
-  TextInput,
-  ScrollView,
-  Alert,
+  View, Text, StyleSheet, FlatList, TouchableOpacity,
+  ActivityIndicator, Alert,
 } from 'react-native';
-import { Consulta, mockConsultas } from '../../model';
-
-type NovaConsulta = {
-  animalNome: string;
-  tutorNome: string;
-  data: string;
-  horario: string;
-  observacoes: string;
-};
+import { useNavigation } from '@react-navigation/native';
+import { useConsultas, useDeletarConsulta } from '../../hooks/useConsultas';
 
 export default function AgendaScreen() {
-  const [consultas, setConsultas] = useState<Consulta[]>(mockConsultas);
-  const [selectedDate, setSelectedDate] = useState<string>(
-    new Date().toISOString().split('T')[0]
-  );
-  const [modalVisible, setModalVisible] = useState(false);
-  const [novaConsulta, setNovaConsulta] = useState<NovaConsulta>({
-    animalNome: '',
-    tutorNome: '',
-    data: '',
-    horario: '',
-    observacoes: '',
-  });
+  const navigation = useNavigation<any>();
+  const { data: consultas, isLoading, isError, refetch } = useConsultas();
+  const deletarConsulta = useDeletarConsulta();
+
+  const handleDeletar = (id: string) => {
+    Alert.alert('Cancelar Consulta', 'Deseja realmente cancelar?', [
+      { text: 'Não', style: 'cancel' },
+      {
+        text: 'Sim',
+        style: 'destructive',
+        onPress: () => deletarConsulta.mutate(id, {
+          onSuccess: () => Alert.alert('Sucesso', 'Consulta cancelada!'),
+        }),
+      },
+    ]);
+  };
+
+  if (isLoading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color="#1e3a8a" />
+      </View>
+    );
+  }
+
+  if (isError) {
+    return (
+      <View style={styles.centered}>
+        <Text style={styles.errorText}>Erro ao carregar consultas.</Text>
+        <TouchableOpacity onPress={() => refetch()}>
+          <Text style={styles.retryText}>Tentar novamente</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'agendada': return '#0077ff';
-      case 'realizada': return '#00ceab';
-      case 'cancelada': return '#f44336';
+      case 'AGENDADA': return '#f59e0b';
+      case 'REALIZADA': return '#10b981';
+      case 'CANCELADA': return '#ef4444';
       default: return '#999';
     }
   };
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'agendada': return '📅';
-      case 'realizada': return '✅';
-      case 'cancelada': return '❌';
-      default: return '📝';
-    }
-  };
-
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case 'agendada': return 'Agendada';
-      case 'realizada': return 'Realizada';
-      case 'cancelada': return 'Cancelada';
-      default: return status;
-    }
-  };
-
-  const consultasFiltradas = consultas.filter(consulta => consulta.data === selectedDate);
-
-  const handleCancelarConsulta = (consulta: Consulta) => {
-    Alert.alert(
-      'Cancelar Consulta',
-      `Tem certeza que deseja cancelar a consulta de ${consulta.animalNome}?`,
-      [
-        { text: 'Não', style: 'cancel' },
-        {
-          text: 'Sim',
-          style: 'destructive',
-          onPress: () => {
-            setConsultas(prev =>
-              prev.map(c =>
-                c.id === consulta.id ? { ...c, status: 'cancelada' } : c
-              )
-            );
-            Alert.alert('Sucesso', 'Consulta cancelada!');
-          },
-        },
-      ]
-    );
-  };
-
-  const handleRealizarConsulta = (consulta: Consulta) => {
-    Alert.alert(
-      'Realizar Consulta',
-      `Marcar consulta de ${consulta.animalNome} como realizada?`,
-      [
-        { text: 'Não', style: 'cancel' },
-        {
-          text: 'Sim',
-          onPress: () => {
-            setConsultas(prev =>
-              prev.map(c =>
-                c.id === consulta.id ? { ...c, status: 'realizada' } : c
-              )
-            );
-            Alert.alert('Sucesso', 'Consulta realizada!');
-          },
-        },
-      ]
-    );
-  };
-
-  const handleAdicionarConsulta = () => {
-    if (!novaConsulta.animalNome || !novaConsulta.tutorNome || !novaConsulta.data || !novaConsulta.horario) {
-      Alert.alert('Erro', 'Preencha todos os campos obrigatórios');
-      return;
-    }
-
-    // Validar formato da data (DD/MM/AAAA)
-    const dataParts = novaConsulta.data.split('/');
-    if (dataParts.length === 3) {
-      const dataFormatada = `${dataParts[2]}-${dataParts[1]}-${dataParts[0]}`;
-      
-      const nova: Consulta = {
-        id: Date.now().toString(),
-        animalId: Date.now().toString(),
-        animalNome: novaConsulta.animalNome,
-        animalEspecie: 'outro',
-        tutorId: Date.now().toString(),
-        tutorNome: novaConsulta.tutorNome,
-        veterinarioId: '1',
-        veterinarioNome: 'Dr. Carlos Silva',
-        data: dataFormatada,
-        horario: novaConsulta.horario,
-        status: 'agendada',
-        observacoes: novaConsulta.observacoes,
-      };
-
-      setConsultas([...consultas, nova]);
-      setModalVisible(false);
-      setNovaConsulta({
-        animalNome: '',
-        tutorNome: '',
-        data: '',
-        horario: '',
-        observacoes: '',
-      });
-      Alert.alert('Sucesso', 'Consulta agendada!');
-    } else {
-      Alert.alert('Erro', 'Formato de data inválido. Use DD/MM/AAAA');
-    }
-  };
-
-  const handleMudarData = (direction: 'anterior' | 'proximo') => {
-    const dataAtual = new Date(selectedDate);
-    if (direction === 'anterior') {
-      dataAtual.setDate(dataAtual.getDate() - 1);
-    } else {
-      dataAtual.setDate(dataAtual.getDate() + 1);
-    }
-    setSelectedDate(dataAtual.toISOString().split('T')[0]);
-  };
-
-  const handleDataInputChange = (text: string) => {
-    setSelectedDate(text);
-  };
-
-  const renderConsultaCard = ({ item }: { item: Consulta }) => (
+  const renderConsultaCard = ({ item }: { item: any }) => (
     <View style={styles.card}>
-      <View style={styles.cardHeader}>
-        <View style={styles.headerLeft}>
-          <Text style={styles.horario}>{item.horario}</Text>
-          <View style={[styles.statusBadge, { backgroundColor: getStatusColor(item.status) }]}>
-            <Text style={styles.statusText}>
-              {getStatusIcon(item.status)} {getStatusText(item.status)}
-            </Text>
-          </View>
-        </View>
+      <Text style={styles.animalNome}>{item.animalNome || 'Animal'}</Text>
+      <Text style={styles.info}>👤 {item.veterinarioNome || 'Veterinário'}</Text>
+      <Text style={styles.info}>
+        📅 {item.dataHora ? new Date(item.dataHora).toLocaleString('pt-BR') : '-'}
+      </Text>
+      <View style={[styles.statusBadge, { backgroundColor: getStatusColor(item.status) }]}>
+        <Text style={styles.statusText}>{item.status}</Text>
       </View>
-
-      <View style={styles.cardBody}>
-        <Text style={styles.animalNome}>{item.animalNome}</Text>
-        <Text style={styles.tutorNome}>👤 Tutor: {item.tutorNome}</Text>
-        {item.observacoes && (
-          <Text style={styles.observacoes}>📝 {item.observacoes}</Text>
-        )}
+      <View style={styles.actions}>
+        <TouchableOpacity
+          style={styles.btnEditar}
+          onPress={() => navigation.navigate('EditarConsulta', { id: item.id })}
+        >
+          <Text style={styles.btnText}>Editar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.btnExcluir} onPress={() => handleDeletar(item.id)}>
+          <Text style={styles.btnText}>Cancelar</Text>
+        </TouchableOpacity>
       </View>
-
-      {item.status === 'agendada' && (
-        <View style={styles.cardActions}>
-          <TouchableOpacity
-            style={[styles.actionButton, styles.realizarButton]}
-            onPress={() => handleRealizarConsulta(item)}
-          >
-            <Text style={styles.actionButtonText}>Realizar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.actionButton, styles.cancelarButton]}
-            onPress={() => handleCancelarConsulta(item)}
-          >
-            <Text style={styles.actionButtonText}>Cancelar</Text>
-          </TouchableOpacity>
-        </View>
-      )}
     </View>
   );
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>📅 Agenda</Text>
-        <Text style={styles.subtitle}>Gerencie suas consultas</Text>
+        <Text style={styles.title}>📅 Consultas</Text>
       </View>
-
-      {/* Seletor de data melhorado */}
-      <View style={styles.dateSelector}>
-        <TouchableOpacity
-          style={styles.dateButton}
-          onPress={() => handleMudarData('anterior')}
-        >
-          <Text style={styles.dateButtonText}>◀ Dia anterior</Text>
-        </TouchableOpacity>
-        
-        <View style={styles.dateDisplay}>
-          <TextInput
-            style={styles.dateInput}
-            value={selectedDate.split('-').reverse().join('/')}
-            onChangeText={(text) => {
-              // Permite digitar a data manualmente
-              if (text.length === 2 || text.length === 5) {
-                setNovaConsulta(prev => ({ ...prev, data: text + '/' }));
-              } else {
-                // Atualiza a data selecionada quando o usuário terminar de digitar
-                const dataParts = text.split('/');
-                if (dataParts.length === 3) {
-                  const dataFormatada = `${dataParts[2]}-${dataParts[1]}-${dataParts[0]}`;
-                  setSelectedDate(dataFormatada);
-                }
-                setNovaConsulta(prev => ({ ...prev, data: text }));
-              }
-            }}
-            placeholder="DD/MM/AAAA"
-            keyboardType="numeric"
-            maxLength={10}
-          />
-        </View>
-        
-        <TouchableOpacity
-          style={styles.dateButton}
-          onPress={() => handleMudarData('proximo')}
-        >
-          <Text style={styles.dateButtonText}>Próximo dia ▶</Text>
-        </TouchableOpacity>
-      </View>
-
-      <TouchableOpacity
-        style={styles.novaConsultaButton}
-        onPress={() => setModalVisible(true)}
-      >
-        <Text style={styles.novaConsultaButtonText}>+ Nova Consulta</Text>
-      </TouchableOpacity>
-
       <FlatList
-        data={consultasFiltradas}
-        keyExtractor={(item) => item.id}
+        data={consultas}
+        keyExtractor={(item) => String(item.id)}
         renderItem={renderConsultaCard}
-        showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
-        extraData={consultas} // ← FORÇA ATUALIZAÇÃO QUANDO CONSULTAS MUDAM
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyIcon}>📅</Text>
-            <Text style={styles.emptyText}>Nenhuma consulta agendada para este dia</Text>
-            <TouchableOpacity
-              style={styles.emptyButton}
-              onPress={() => setModalVisible(true)}
-            >
-              <Text style={styles.emptyButtonText}>Agendar primeira consulta</Text>
-            </TouchableOpacity>
-          </View>
-        }
+        ListEmptyComponent={<Text style={styles.emptyText}>Nenhuma consulta agendada.</Text>}
+        refreshing={isLoading}
+        onRefresh={refetch}
       />
-
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
+      <TouchableOpacity
+        style={styles.fab}
+        onPress={() => navigation.navigate('NovaConsulta')}
       >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContainer}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>📝 Nova Consulta</Text>
-              <TouchableOpacity onPress={() => setModalVisible(false)}>
-                <Text style={styles.modalClose}>✕</Text>
-              </TouchableOpacity>
-            </View>
-
-            <ScrollView showsVerticalScrollIndicator={false}>
-              <Text style={styles.inputLabel}>Nome do Pet *</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Ex: Thor"
-                value={novaConsulta.animalNome}
-                onChangeText={(text) => setNovaConsulta({ ...novaConsulta, animalNome: text })}
-              />
-
-              <Text style={styles.inputLabel}>Nome do Tutor *</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Ex: Ana Souza"
-                value={novaConsulta.tutorNome}
-                onChangeText={(text) => setNovaConsulta({ ...novaConsulta, tutorNome: text })}
-              />
-
-              <View style={styles.row}>
-                <View style={styles.rowItem}>
-                  <Text style={styles.inputLabel}>Data *</Text>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="DD/MM/AAAA"
-                    value={novaConsulta.data}
-                    onChangeText={(text) => setNovaConsulta({ ...novaConsulta, data: text })}
-                  />
-                </View>
-                <View style={styles.rowItem}>
-                  <Text style={styles.inputLabel}>Horário *</Text>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="HH:MM"
-                    value={novaConsulta.horario}
-                    onChangeText={(text) => setNovaConsulta({ ...novaConsulta, horario: text })}
-                  />
-                </View>
-              </View>
-
-              <Text style={styles.inputLabel}>Observações</Text>
-              <TextInput
-                style={[styles.input, styles.textArea]}
-                placeholder="Ex: Vacinação, retorno, etc."
-                value={novaConsulta.observacoes}
-                onChangeText={(text) => setNovaConsulta({ ...novaConsulta, observacoes: text })}
-                multiline
-                numberOfLines={3}
-              />
-
-              <TouchableOpacity style={styles.salvarButton} onPress={handleAdicionarConsulta}>
-                <Text style={styles.salvarButtonText}>Agendar Consulta</Text>
-              </TouchableOpacity>
-            </ScrollView>
-          </View>
-        </View>
-      </Modal>
+        <Text style={styles.fabText}>+</Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f5f5f5' },
-  header: { backgroundColor: '#60a5fa', padding: 20, paddingTop: 20, paddingBottom: 20 },
-  title: { fontSize: 28, fontWeight: 'bold', color: '#fff' },
-  subtitle: { fontSize: 14, color: '#fff', opacity: 0.9, marginTop: 5 },
-  dateSelector: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#fff', padding: 15, borderBottomWidth: 1, borderBottomColor: '#eee' },
-  dateButton: { paddingHorizontal: 15, paddingVertical: 8, backgroundColor: '#f0f0f0', borderRadius: 8 },
-  dateButtonText: { fontSize: 12, color: '#666' },
-  dateDisplay: { backgroundColor: '#3b82f6', paddingHorizontal: 20, paddingVertical: 8, borderRadius: 8, minWidth: 120, alignItems: 'center' },
-  dateInput: { fontSize: 14, fontWeight: 'bold', color: '#fff', textAlign: 'center', minWidth: 100 },
-  novaConsultaButton: { backgroundColor: '#1e3a8a', margin: 15, padding: 12, borderRadius: 8, alignItems: 'center' },
-  novaConsultaButtonText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
+  centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  header: { backgroundColor: '#60a5fa', padding: 20 },
+  title: { fontSize: 24, fontWeight: 'bold', color: '#fff' },
   listContent: { padding: 15 },
-  card: { backgroundColor: '#fff', borderRadius: 12, padding: 15, marginBottom: 15, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 3 },
-  cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
-  headerLeft: { flexDirection: 'row', alignItems: 'center', gap: 10 },
-  horario: { fontSize: 16, fontWeight: 'bold', color: '#333' },
-  statusBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 },
-  statusText: { fontSize: 12, color: '#fff', fontWeight: 'bold' },
-  cardBody: { borderTopWidth: 1, borderTopColor: '#eee', paddingTop: 10, marginTop: 5 },
-  animalNome: { fontSize: 18, fontWeight: 'bold', color: '#333', marginBottom: 4 },
-  tutorNome: { fontSize: 14, color: '#666', marginBottom: 4 },
-  observacoes: { fontSize: 13, color: '#999', marginTop: 5, fontStyle: 'italic' },
-  cardActions: { flexDirection: 'row', gap: 10, marginTop: 12, paddingTop: 12, borderTopWidth: 1, borderTopColor: '#eee' },
-  actionButton: { flex: 1, paddingVertical: 8, borderRadius: 8, alignItems: 'center' },
-  realizarButton: { backgroundColor: '#00ceab' },
-  cancelarButton: { backgroundColor: '#f44336' },
-  actionButtonText: { color: '#fff', fontWeight: 'bold' },
-  emptyContainer: { alignItems: 'center', padding: 40 },
-  emptyIcon: { fontSize: 48, marginBottom: 10 },
-  emptyText: { fontSize: 16, color: '#999', textAlign: 'center' },
-  emptyButton: { marginTop: 20, backgroundColor: '#1e3a8a', paddingHorizontal: 20, paddingVertical: 10, borderRadius: 8 },
-  emptyButtonText: { color: '#fff', fontWeight: 'bold' },
-  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center' },
-  modalContainer: { backgroundColor: '#fff', borderRadius: 20, padding: 20, width: '90%', maxHeight: '80%' },
-  modalHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 },
-  modalTitle: { fontSize: 20, fontWeight: 'bold', color: '#333' },
-  modalClose: { fontSize: 24, color: '#999' },
-  inputLabel: { fontSize: 14, fontWeight: '500', color: '#555', marginBottom: 5, marginTop: 10 },
-  input: { borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 12, fontSize: 16, backgroundColor: '#fafafa' },
-  textArea: { height: 80, textAlignVertical: 'top' },
-  row: { flexDirection: 'row', gap: 15 },
-  rowItem: { flex: 1 },
-  salvarButton: { backgroundColor: '#4CAF50', padding: 15, borderRadius: 8, alignItems: 'center', marginTop: 20, marginBottom: 10 },
-  salvarButtonText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
+  card: { backgroundColor: '#fff', borderRadius: 12, padding: 15, marginBottom: 15, elevation: 3 },
+  animalNome: { fontSize: 18, fontWeight: 'bold', color: '#333', marginBottom: 5 },
+  info: { fontSize: 14, color: '#666', marginBottom: 3 },
+  statusBadge: { alignSelf: 'flex-start', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12, marginTop: 5 },
+  statusText: { color: '#fff', fontSize: 12, fontWeight: 'bold' },
+  actions: { flexDirection: 'row', gap: 10, marginTop: 10 },
+  btnEditar: { backgroundColor: '#f59e0b', padding: 8, borderRadius: 8, flex: 1, alignItems: 'center' },
+  btnExcluir: { backgroundColor: '#ef4444', padding: 8, borderRadius: 8, flex: 1, alignItems: 'center' },
+  btnText: { color: '#fff', fontWeight: 'bold' },
+  emptyText: { textAlign: 'center', marginTop: 50, color: '#999' },
+  errorText: { color: '#ef4444', fontSize: 16, marginBottom: 10 },
+  retryText: { color: '#1e3a8a', fontWeight: 'bold' },
+  fab: { position: 'absolute', right: 20, bottom: 20, backgroundColor: '#1e3a8a', width: 60, height: 60, borderRadius: 30, justifyContent: 'center', alignItems: 'center', elevation: 5 },
+  fabText: { color: '#fff', fontSize: 32, fontWeight: 'bold' },
 });

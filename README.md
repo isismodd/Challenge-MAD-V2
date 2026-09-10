@@ -126,7 +126,7 @@ npx expo install react-native-gesture-handler
 4. Inicie o projeto
 
 ```
-npx run android
+npm run android
 ```
 
 ## 🔐 Credenciais de Teste
