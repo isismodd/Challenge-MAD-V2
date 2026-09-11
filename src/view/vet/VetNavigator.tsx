@@ -27,13 +27,11 @@ function HomeScreen() {
   const { user, logout } = useAuth();
   return (
     <View style={styles.container}>
-      <Text style={styles.welcome}>Bem-vindo, {user?.nome || 'Veterinário'}! 👋</Text>
-      <Text style={styles.subtitle}>Logado como {user?.role || 'VETERINARIO'}</Text>
-      <View style={styles.infoBox}>
-        <Text style={styles.infoText}>📧 {user?.email}</Text>
-      </View>
+      <Text style={styles.welcome}>Bem-vindo ao ClyvoPet</Text>
+      <Text style={styles.subtitle}>Sistema de gestão para clínica veterinária</Text>
+      
       <View style={styles.logoutButton}>
-        <Button title="Sair do App" onPress={logout} color="#ff4444" />
+        <Button title="Logout" onPress={logout} color="#ff4444" />
       </View>
     </View>
   );

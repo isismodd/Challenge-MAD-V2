@@ -16,10 +16,59 @@ export default function SaudePreventivaScreen() {
 
   const lembretes = Array.isArray(lembretesData) ? lembretesData : [];
 
+  // Log para debug — mostra o JSON completo de cada lembrete
+  React.useEffect(() => {
+    if (lembretes.length > 0) {
+      console.log('EXEMPLO DE LEMBRETE:', JSON.stringify(lembretes[0], null, 2));
+    }
+  }, [lembretes]);
+
+  // Função auxiliar: extrai o e-mail do lembrete tentando várias fontes
+  const getEmail = (item: any): string => {
+    return (
+      item.tutorEmail ||
+      item.email ||
+      item.tutor_email ||
+      item.emailTutor ||
+      item.consulta?.tutorEmail ||
+      item.animal?.tutorEmail ||
+      item.consulta?.animal?.tutorEmail ||
+      '-'
+    );
+  };
+
+  // Função auxiliar: extrai o nome do animal
+  const getAnimalNome = (item: any): string => {
+    return (
+      item.animalNome ||
+      item.animal?.nome ||
+      item.consulta?.animalNome ||
+      item.consulta?.animal?.nome ||
+      '-'
+    );
+  };
+
+  // Função auxiliar: extrai o nome do tutor
+  const getTutorNome = (item: any): string => {
+    return (
+      item.tutorNome ||
+      item.consulta?.tutorNome ||
+      item.animal?.tutorNome ||
+      item.consulta?.animal?.tutorNome ||
+      '-'
+    );
+  };
+
+  // Função auxiliar: verifica se o lembrete foi enviado
+  const isEnviado = (item: any): boolean => {
+    const valor = item.enviado ?? item.enviadoFlag ?? item.status;
+    return valor === true || valor === 1 || valor === 'S' || valor === 'ENVIADO';
+  };
+
   // Painel de estatísticas
   const stats = useMemo(() => {
     const total = lembretes.length;
-    const enviados = lembretes.filter((l: any) => l.enviado === true || l.enviado === 1).length;
+    const enviados = lembretes.filter((l: any) => isEnviado(l)).length;
     const pendentes = total - enviados;
     return { total, enviados, pendentes };
   }, [lembretes]);
@@ -27,7 +76,7 @@ export default function SaudePreventivaScreen() {
   // Lista filtrada
   const lembretesFiltrados = useMemo(() => {
     if (filtro === 'pendentes') {
-      return lembretes.filter((l: any) => !l.enviado && l.enviado !== 1);
+      return lembretes.filter((l: any) => !isEnviado(l));
     }
     return lembretes;
   }, [lembretes, filtro]);
@@ -78,7 +127,10 @@ export default function SaudePreventivaScreen() {
   }
 
   const renderLembreteCard = ({ item }: { item: any }) => {
-    const enviado = item.enviado === true || item.enviado === 1;
+    const enviado = isEnviado(item);
+    const email = getEmail(item);
+    const animalNome = getAnimalNome(item);
+    const tutorNome = getTutorNome(item);
 
     return (
       <View style={styles.card}>
@@ -91,9 +143,9 @@ export default function SaudePreventivaScreen() {
           </View>
         </View>
 
-        <Text style={styles.info}>🐾 Animal: {item.animalNome || '-'}</Text>
-        <Text style={styles.info}>👤 Tutor: {item.tutorNome || '-'}</Text>
-        <Text style={styles.info}>📧 {item.tutorEmail || '-'}</Text>
+        <Text style={styles.info}>🐾 Animal: {animalNome}</Text>
+        <Text style={styles.info}>👤 Tutor: {tutorNome}</Text>
+        <Text style={styles.info}>📧 E-mail: {email}</Text>
         <Text style={styles.info}>
           📅 {item.dataEnvio ? new Date(item.dataEnvio).toLocaleString('pt-BR') : '-'}
         </Text>
@@ -125,7 +177,6 @@ export default function SaudePreventivaScreen() {
 
       {/* Botões de ação */}
       <View style={styles.actionsContainer}>
-        {/* Toggle de filtro */}
         <View style={styles.toggleContainer}>
           <TouchableOpacity
             style={[styles.toggleButton, filtro === 'todos' && styles.toggleButtonActive]}
@@ -145,7 +196,6 @@ export default function SaudePreventivaScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* Botão Enviar Todos */}
         <TouchableOpacity
           style={[styles.btnEnviarTodos, enviarTodos.isPending && { opacity: 0.7 }]}
           onPress={handleEnviarTodos}
@@ -159,7 +209,6 @@ export default function SaudePreventivaScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* Lista de lembretes */}
       <FlatList
         data={lembretesFiltrados}
         keyExtractor={(item) => String(item.id)}
@@ -186,7 +235,6 @@ const styles = StyleSheet.create({
   header: { backgroundColor: '#60a5fa', padding: 20 },
   title: { fontSize: 24, fontWeight: 'bold', color: '#fff', textAlign: 'center' },
 
-  // Painel de estatísticas
   statsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -197,70 +245,27 @@ const styles = StyleSheet.create({
     borderBottomColor: '#eee',
   },
   statCard: {
-    flex: 1,
-    alignItems: 'center',
-    marginHorizontal: 5,
-    paddingVertical: 10,
-    backgroundColor: '#f9fafb',
-    borderRadius: 10,
-    elevation: 1,
+    flex: 1, alignItems: 'center', marginHorizontal: 5, paddingVertical: 10,
+    backgroundColor: '#f9fafb', borderRadius: 10, elevation: 1,
   },
   statLabel: { fontSize: 12, color: '#666', marginBottom: 5 },
   statValue: { fontSize: 24, fontWeight: 'bold' },
 
-  // Botões de ação
-  actionsContainer: {
-    padding: 15,
-    gap: 10,
-  },
-  toggleContainer: {
-    flexDirection: 'row',
-    backgroundColor: '#e5e7eb',
-    borderRadius: 10,
-    padding: 4,
-  },
-  toggleButton: {
-    flex: 1,
-    paddingVertical: 10,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  toggleButtonActive: {
-    backgroundColor: '#fff',
-    elevation: 2,
-  },
+  actionsContainer: { padding: 15, gap: 10 },
+  toggleContainer: { flexDirection: 'row', backgroundColor: '#e5e7eb', borderRadius: 10, padding: 4 },
+  toggleButton: { flex: 1, paddingVertical: 10, borderRadius: 8, alignItems: 'center' },
+  toggleButtonActive: { backgroundColor: '#fff', elevation: 2 },
   toggleText: { fontSize: 14, fontWeight: '600', color: '#666' },
   toggleTextActive: { color: '#1e3a8a' },
 
-  btnEnviarTodos: {
-    backgroundColor: '#1e3a8a',
-    padding: 15,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
+  btnEnviarTodos: { backgroundColor: '#1e3a8a', padding: 15, borderRadius: 10, alignItems: 'center' },
   btnEnviarTodosText: { color: '#fff', fontWeight: 'bold', fontSize: 15 },
 
-  // Lista
   listContent: { padding: 15 },
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 15,
-    marginBottom: 15,
-    elevation: 3,
-  },
-  cardHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
+  card: { backgroundColor: '#fff', borderRadius: 12, padding: 15, marginBottom: 15, elevation: 3 },
+  cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
   titulo: { fontSize: 16, fontWeight: 'bold', color: '#333' },
-  statusBadge: {
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
+  statusBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 },
   statusText: { color: '#fff', fontSize: 12, fontWeight: 'bold' },
   info: { fontSize: 14, color: '#666', marginBottom: 3 },
   emptyText: { textAlign: 'center', marginTop: 50, color: '#999' },
