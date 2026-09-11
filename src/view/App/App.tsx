@@ -9,8 +9,9 @@ import LoginScreen from '../../view/login/LoginScreen';
 import CadastroScreen from '../../view/login/CadastroScreen';
 import VetNavigator from '../../view/vet/VetNavigator';
 import CadastroAnimalScreen from '../../view/vet/CadastroAnimalScreen';
-import CadastroConsultaScreen from '../../view/vet/CadastroConsultaScreen';
 import DetalhesAnimalScreen from '../../view/vet/DetalhesAnimalScreen';
+import CadastroConsultaScreen from '../../view/vet/CadastroConsultaScreen';
+import DetalhesConsultaScreen from '../../view/vet/DetalhesConsultaScreen';
 
 const Stack = createStackNavigator();
 const queryClient = new QueryClient({
@@ -46,6 +47,8 @@ function AppNavigator() {
             options={{ headerShown: true, title: 'Nova Consulta' }} />
           <Stack.Screen name="EditarConsulta" component={CadastroConsultaScreen}
             options={{ headerShown: true, title: 'Editar Consulta' }} />
+          <Stack.Screen name="DetalhesConsulta" component={DetalhesConsultaScreen}
+            options={{ headerShown: true, title: 'Detalhes da Consulta' }} />
         </>
       )}
     </Stack.Navigator>

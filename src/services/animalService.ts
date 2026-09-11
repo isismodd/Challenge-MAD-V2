@@ -7,7 +7,12 @@ export type AnimalPayload = {
 };
 
 export const animalService = {
-  getAll: async () => (await api.get('/animais')).data,
+  getAll: async () => {
+    const { data } = await api.get('/animais');
+    if (Array.isArray(data)) return data;
+    if (data && Array.isArray(data.content)) return data.content;
+    return [];
+  },
   getById: async (id: string) => (await api.get(`/animais/${id}`)).data,
   create: async (animal: AnimalPayload) => (await api.post('/animais', animal)).data,
   update: async (id: string, animal: Partial<AnimalPayload>) => (await api.put(`/animais/${id}`, animal)).data,

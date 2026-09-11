@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+// src/view/vet/CadastroConsultaScreen.tsx
+import React, { useState, useEffect } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, StyleSheet,
   ScrollView, Alert, ActivityIndicator, Modal, FlatList,
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useAuth } from '../../control/AuthContext';
 import { useAnimais } from '../../hooks/useAnimais';
 import { useVeterinarios } from '../../hooks/useVeterinarios';
 import { useCriarConsulta, useAtualizarConsulta } from '../../hooks/useConsultas';
@@ -12,23 +14,46 @@ import { ConsultaPayload } from '../../services/consultaService';
 export default function CadastroConsultaScreen() {
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
+  const { user } = useAuth(); // ← Pega o usuário logado
+
   const consultaId = route.params?.id;
   const isEdicao = !!consultaId;
 
-  const { data: animais } = useAnimais();
-  const { data: veterinarios } = useVeterinarios();
+  const { data: animaisData } = useAnimais();
+  const { data: veterinariosData } = useVeterinarios();
   const criarConsulta = useCriarConsulta();
   const atualizarConsulta = useAtualizarConsulta();
 
+  const animais = Array.isArray(animaisData) ? animaisData : [];
+  const veterinarios = Array.isArray(veterinariosData) ? veterinariosData : [];
+
+  // Se o veterinário logado não estiver na lista da API, adiciona ele manualmente
+  const listaVeterinarios = React.useMemo(() => {
+    if (!user) return veterinarios;
+    const jaExiste = veterinarios.some((v: any) => Number(v.id) === Number(user.id));
+    if (jaExiste) return veterinarios;
+    return [
+      { id: user.id, nome: user.nome, email: user.email, especialidade: 'Veterinário(a)' },
+      ...veterinarios,
+    ];
+  }, [veterinarios, user]);
+
   const [form, setForm] = useState<ConsultaPayload>({
     animalId: 0,
-    veterinarioId: 0,
+    veterinarioId: user?.id || 0, // ← Pré-seleciona o veterinário logado
     dataHora: new Date().toISOString(),
     motivo: '',
     diagnostico: '',
     prescricao: '',
     status: 'AGENDADA',
   });
+
+  // Atualiza o veterinárioId quando o user carrega (caso o state inicial seja 0)
+  useEffect(() => {
+    if (user && !isEdicao && form.veterinarioId === 0) {
+      setForm((prev) => ({ ...prev, veterinarioId: user.id }));
+    }
+  }, [user, isEdicao]);
 
   const [modalAnimalVisible, setModalAnimalVisible] = useState(false);
   const [modalVetVisible, setModalVetVisible] = useState(false);
@@ -57,24 +82,21 @@ export default function CadastroConsultaScreen() {
 
   const isPending = criarConsulta.isPending || atualizarConsulta.isPending;
 
+  const animalSelecionado = animais.find((a: any) => Number(a.id) === Number(form.animalId));
+  const vetSelecionado = listaVeterinarios.find((v: any) => Number(v.id) === Number(form.veterinarioId));
+
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>{isEdicao ? '✏️ Editar Consulta' : '📅 Nova Consulta'}</Text>
 
-      {/* Seleção de Animal */}
       <Text style={styles.label}>Animal *</Text>
       <TouchableOpacity style={styles.select} onPress={() => setModalAnimalVisible(true)}>
-        <Text>
-          {animais?.find((a: any) => a.id === form.animalId)?.nome || 'Selecione um animal'}
-        </Text>
+        <Text>{animalSelecionado?.nome || 'Selecione um animal'}</Text>
       </TouchableOpacity>
 
-      {/* Seleção de Veterinário */}
       <Text style={styles.label}>Veterinário *</Text>
       <TouchableOpacity style={styles.select} onPress={() => setModalVetVisible(true)}>
-        <Text>
-          {veterinarios?.find((v: any) => v.id === form.veterinarioId)?.nome || 'Selecione um veterinário'}
-        </Text>
+        <Text>{vetSelecionado?.nome || 'Selecione um veterinário'}</Text>
       </TouchableOpacity>
 
       <Text style={styles.label}>Data e Hora (ISO)</Text>
@@ -121,6 +143,7 @@ export default function CadastroConsultaScreen() {
             <FlatList
               data={animais}
               keyExtractor={(item: any) => String(item.id)}
+              ListEmptyComponent={<Text style={styles.emptyText}>Nenhum animal disponível</Text>}
               renderItem={({ item }) => (
                 <TouchableOpacity
                   style={styles.modalItem}
@@ -143,14 +166,15 @@ export default function CadastroConsultaScreen() {
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Selecione o Veterinário</Text>
             <FlatList
-              data={veterinarios}
+              data={listaVeterinarios}
               keyExtractor={(item: any) => String(item.id)}
+              ListEmptyComponent={<Text style={styles.emptyText}>Nenhum veterinário disponível</Text>}
               renderItem={({ item }) => (
                 <TouchableOpacity
                   style={styles.modalItem}
                   onPress={() => { setForm({ ...form, veterinarioId: item.id }); setModalVetVisible(false); }}
                 >
-                  <Text>{item.nome} - {item.especialidade}</Text>
+                  <Text>{item.nome} {item.especialidade ? `- ${item.especialidade}` : ''}</Text>
                 </TouchableOpacity>
               )}
             />
@@ -179,4 +203,5 @@ const styles = StyleSheet.create({
   modalTitle: { fontSize: 18, fontWeight: 'bold', marginBottom: 15, textAlign: 'center' },
   modalItem: { padding: 15, borderBottomWidth: 1, borderBottomColor: '#eee' },
   modalClose: { marginTop: 10, alignItems: 'center' },
+  emptyText: { textAlign: 'center', color: '#999', padding: 20 },
 });

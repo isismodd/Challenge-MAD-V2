@@ -1,11 +1,62 @@
-import React from 'react';
+// src/view/vet/SaudePreventivaScreen.tsx
+import React, { useState, useMemo } from 'react';
 import {
-  View, Text, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity,
+  View, Text, StyleSheet, FlatList, TouchableOpacity,
+  ActivityIndicator, Alert,
 } from 'react-native';
-import { useLembretes } from '../../hooks/useLembretes';
+import { useLembretes, useEnviarTodosPendentes } from '../../hooks/useLembretes';
+
+type Filtro = 'todos' | 'pendentes';
 
 export default function SaudePreventivaScreen() {
-  const { data: lembretes, isLoading, isError, refetch } = useLembretes();
+  const { data: lembretesData, isLoading, isError, refetch } = useLembretes();
+  const enviarTodos = useEnviarTodosPendentes();
+
+  const [filtro, setFiltro] = useState<Filtro>('todos');
+
+  const lembretes = Array.isArray(lembretesData) ? lembretesData : [];
+
+  // Painel de estatísticas
+  const stats = useMemo(() => {
+    const total = lembretes.length;
+    const enviados = lembretes.filter((l: any) => l.enviado === true || l.enviado === 1).length;
+    const pendentes = total - enviados;
+    return { total, enviados, pendentes };
+  }, [lembretes]);
+
+  // Lista filtrada
+  const lembretesFiltrados = useMemo(() => {
+    if (filtro === 'pendentes') {
+      return lembretes.filter((l: any) => !l.enviado && l.enviado !== 1);
+    }
+    return lembretes;
+  }, [lembretes, filtro]);
+
+  const handleEnviarTodos = () => {
+    if (stats.pendentes === 0) {
+      Alert.alert('Aviso', 'Não há lembretes pendentes para enviar.');
+      return;
+    }
+
+    Alert.alert(
+      'Enviar Todos Pendentes',
+      `Deseja enviar ${stats.pendentes} lembrete(s) pendente(s) por e-mail?`,
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        {
+          text: 'Enviar',
+          onPress: () =>
+            enviarTodos.mutate(undefined, {
+              onSuccess: () => {
+                Alert.alert('Sucesso', 'Lembretes enviados!');
+                refetch();
+              },
+              onError: () => Alert.alert('Erro', 'Não foi possível enviar os lembretes.'),
+            }),
+        },
+      ]
+    );
+  };
 
   if (isLoading) {
     return (
@@ -26,34 +77,104 @@ export default function SaudePreventivaScreen() {
     );
   }
 
-  const renderLembreteCard = ({ item }: { item: any }) => (
-    <View style={styles.card}>
-      <Text style={styles.titulo}>Lembrete #{item.id}</Text>
-      <Text style={styles.info}>🐾 Animal: {item.animalNome || '-'}</Text>
-      <Text style={styles.info}>👤 Tutor: {item.tutorNome || '-'}</Text>
-      <Text style={styles.info}>📧 {item.tutorEmail || '-'}</Text>
-      <Text style={styles.info}>
-        📅 {item.dataEnvio ? new Date(item.dataEnvio).toLocaleString('pt-BR') : '-'}
-      </Text>
-      <View style={[styles.statusBadge, { backgroundColor: item.enviado ? '#10b981' : '#f59e0b' }]}>
-        <Text style={styles.statusText}>{item.enviado ? 'Enviado' : 'Pendente'}</Text>
+  const renderLembreteCard = ({ item }: { item: any }) => {
+    const enviado = item.enviado === true || item.enviado === 1;
+
+    return (
+      <View style={styles.card}>
+        <View style={styles.cardHeader}>
+          <Text style={styles.titulo}>Lembrete #{item.id}</Text>
+          <View style={[styles.statusBadge, { backgroundColor: enviado ? '#10b981' : '#f59e0b' }]}>
+            <Text style={styles.statusText}>
+              {enviado ? '✅ Enviado' : '⏰ Pendente'}
+            </Text>
+          </View>
+        </View>
+
+        <Text style={styles.info}>🐾 Animal: {item.animalNome || '-'}</Text>
+        <Text style={styles.info}>👤 Tutor: {item.tutorNome || '-'}</Text>
+        <Text style={styles.info}>📧 {item.tutorEmail || '-'}</Text>
+        <Text style={styles.info}>
+          📅 {item.dataEnvio ? new Date(item.dataEnvio).toLocaleString('pt-BR') : '-'}
+        </Text>
       </View>
-    </View>
-  );
+    );
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>🔔 Lembretes</Text>
       </View>
+
+      {/* Painel de Estatísticas */}
+      <View style={styles.statsContainer}>
+        <View style={styles.statCard}>
+          <Text style={styles.statLabel}>Total</Text>
+          <Text style={[styles.statValue, { color: '#1e3a8a' }]}>{stats.total}</Text>
+        </View>
+        <View style={styles.statCard}>
+          <Text style={styles.statLabel}>Enviados</Text>
+          <Text style={[styles.statValue, { color: '#10b981' }]}>{stats.enviados}</Text>
+        </View>
+        <View style={styles.statCard}>
+          <Text style={styles.statLabel}>Pendentes</Text>
+          <Text style={[styles.statValue, { color: '#f59e0b' }]}>{stats.pendentes}</Text>
+        </View>
+      </View>
+
+      {/* Botões de ação */}
+      <View style={styles.actionsContainer}>
+        {/* Toggle de filtro */}
+        <View style={styles.toggleContainer}>
+          <TouchableOpacity
+            style={[styles.toggleButton, filtro === 'todos' && styles.toggleButtonActive]}
+            onPress={() => setFiltro('todos')}
+          >
+            <Text style={[styles.toggleText, filtro === 'todos' && styles.toggleTextActive]}>
+              Todos
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.toggleButton, filtro === 'pendentes' && styles.toggleButtonActive]}
+            onPress={() => setFiltro('pendentes')}
+          >
+            <Text style={[styles.toggleText, filtro === 'pendentes' && styles.toggleTextActive]}>
+              Pendentes
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Botão Enviar Todos */}
+        <TouchableOpacity
+          style={[styles.btnEnviarTodos, enviarTodos.isPending && { opacity: 0.7 }]}
+          onPress={handleEnviarTodos}
+          disabled={enviarTodos.isPending}
+        >
+          {enviarTodos.isPending ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Text style={styles.btnEnviarTodosText}>📧 Enviar Todos Pendentes</Text>
+          )}
+        </TouchableOpacity>
+      </View>
+
+      {/* Lista de lembretes */}
       <FlatList
-        data={lembretes}
+        data={lembretesFiltrados}
         keyExtractor={(item) => String(item.id)}
         renderItem={renderLembreteCard}
         contentContainerStyle={styles.listContent}
-        ListEmptyComponent={<Text style={styles.emptyText}>Nenhum lembrete cadastrado.</Text>}
+        ListEmptyComponent={
+          <Text style={styles.emptyText}>
+            {filtro === 'pendentes'
+              ? 'Nenhum lembrete pendente.'
+              : 'Nenhum lembrete cadastrado.'}
+          </Text>
+        }
         refreshing={isLoading}
         onRefresh={refetch}
+        extraData={filtro}
       />
     </View>
   );
@@ -63,13 +184,85 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f5f5f5' },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   header: { backgroundColor: '#60a5fa', padding: 20 },
-  title: { fontSize: 24, fontWeight: 'bold', color: '#fff' },
+  title: { fontSize: 24, fontWeight: 'bold', color: '#fff', textAlign: 'center' },
+
+  // Painel de estatísticas
+  statsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  statCard: {
+    flex: 1,
+    alignItems: 'center',
+    marginHorizontal: 5,
+    paddingVertical: 10,
+    backgroundColor: '#f9fafb',
+    borderRadius: 10,
+    elevation: 1,
+  },
+  statLabel: { fontSize: 12, color: '#666', marginBottom: 5 },
+  statValue: { fontSize: 24, fontWeight: 'bold' },
+
+  // Botões de ação
+  actionsContainer: {
+    padding: 15,
+    gap: 10,
+  },
+  toggleContainer: {
+    flexDirection: 'row',
+    backgroundColor: '#e5e7eb',
+    borderRadius: 10,
+    padding: 4,
+  },
+  toggleButton: {
+    flex: 1,
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  toggleButtonActive: {
+    backgroundColor: '#fff',
+    elevation: 2,
+  },
+  toggleText: { fontSize: 14, fontWeight: '600', color: '#666' },
+  toggleTextActive: { color: '#1e3a8a' },
+
+  btnEnviarTodos: {
+    backgroundColor: '#1e3a8a',
+    padding: 15,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  btnEnviarTodosText: { color: '#fff', fontWeight: 'bold', fontSize: 15 },
+
+  // Lista
   listContent: { padding: 15 },
-  card: { backgroundColor: '#fff', borderRadius: 12, padding: 15, marginBottom: 15, elevation: 3 },
-  titulo: { fontSize: 16, fontWeight: 'bold', color: '#333', marginBottom: 5 },
-  info: { fontSize: 14, color: '#666', marginBottom: 3 },
-  statusBadge: { alignSelf: 'flex-start', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12, marginTop: 5 },
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 15,
+    marginBottom: 15,
+    elevation: 3,
+  },
+  cardHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  titulo: { fontSize: 16, fontWeight: 'bold', color: '#333' },
+  statusBadge: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
   statusText: { color: '#fff', fontSize: 12, fontWeight: 'bold' },
+  info: { fontSize: 14, color: '#666', marginBottom: 3 },
   emptyText: { textAlign: 'center', marginTop: 50, color: '#999' },
   errorText: { color: '#ef4444', fontSize: 16, marginBottom: 10 },
   retryText: { color: '#1e3a8a', fontWeight: 'bold' },
