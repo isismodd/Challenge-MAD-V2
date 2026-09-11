@@ -1,3 +1,4 @@
+// src/view/vet/AgendaScreen.tsx
 import React from 'react';
 import {
   View, Text, StyleSheet, FlatList, TouchableOpacity,
@@ -20,14 +21,14 @@ export default function AgendaScreen() {
 
   const consultas = Array.isArray(consultasData) ? consultasData : [];
 
-  const handleCancelar = (id: string) => {
+  const handleCancelar = (consulta: any) => {
     Alert.alert('Cancelar Consulta', 'Deseja realmente cancelar?', [
       { text: 'Não', style: 'cancel' },
       {
         text: 'Sim',
         style: 'destructive',
         onPress: () =>
-          cancelarConsulta.mutate(id, {
+          cancelarConsulta.mutate(consulta, {
             onSuccess: () => { Alert.alert('Sucesso', 'Consulta cancelada!'); refetch(); },
             onError: () => Alert.alert('Erro', 'Não foi possível cancelar.'),
           }),
@@ -35,13 +36,13 @@ export default function AgendaScreen() {
     ]);
   };
 
-  const handleFinalizar = (id: string) => {
+  const handleFinalizar = (consulta: any) => {
     Alert.alert('Finalizar Consulta', 'Marcar como realizada?', [
       { text: 'Não', style: 'cancel' },
       {
         text: 'Sim',
         onPress: () =>
-          finalizarConsulta.mutate(id, {
+          finalizarConsulta.mutate(consulta, {
             onSuccess: () => { Alert.alert('Sucesso', 'Consulta finalizada!'); refetch(); },
             onError: () => Alert.alert('Erro', 'Não foi possível finalizar.'),
           }),
@@ -106,9 +107,7 @@ export default function AgendaScreen() {
           <Text style={styles.statusText}>{item.status}</Text>
         </View>
 
-        {/* 5 botões de ação */}
         <View style={styles.actions}>
-          {/* 👁️ Visualizar */}
           <TouchableOpacity
             style={styles.btnVisualizar}
             onPress={() => navigation.navigate('DetalhesConsulta', { id: item.id })}
@@ -116,7 +115,6 @@ export default function AgendaScreen() {
             <Text style={styles.btnIcon}>👁️</Text>
           </TouchableOpacity>
 
-          {/* ✏️ Editar */}
           <TouchableOpacity
             style={styles.btnEditar}
             onPress={() => navigation.navigate('EditarConsulta', { id: item.id })}
@@ -124,27 +122,24 @@ export default function AgendaScreen() {
             <Text style={styles.btnIcon}>✏️</Text>
           </TouchableOpacity>
 
-          {/* ❌ Cancelar (só se agendada) */}
           {agendada && (
             <TouchableOpacity
               style={styles.btnCancelar}
-              onPress={() => handleCancelar(item.id)}
+              onPress={() => handleCancelar(item)}
             >
               <Text style={styles.btnIcon}>❌</Text>
             </TouchableOpacity>
           )}
 
-          {/* ✅ Finalizar (só se agendada) */}
           {agendada && (
             <TouchableOpacity
               style={styles.btnFinalizar}
-              onPress={() => handleFinalizar(item.id)}
+              onPress={() => handleFinalizar(item)}
             >
               <Text style={styles.btnIcon}>✅</Text>
             </TouchableOpacity>
           )}
 
-          {/* 🔔 Enviar Lembrete (só se agendada) */}
           {agendada && (
             <TouchableOpacity
               style={styles.btnLembrete}
@@ -190,14 +185,7 @@ const styles = StyleSheet.create({
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   header: { backgroundColor: '#60a5fa', padding: 20 },
   title: { fontSize: 24, fontWeight: 'bold', color: '#fff', textAlign: 'center' },
-  btnAdicionar: {
-    backgroundColor: '#1e3a8a',
-    padding: 15,
-    marginHorizontal: 15,
-    marginTop: 15,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
+  btnAdicionar: { backgroundColor: '#1e3a8a', padding: 15, marginHorizontal: 15, marginTop: 15, borderRadius: 8, alignItems: 'center' },
   btnAdicionarText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
   listContent: { padding: 15 },
   card: { backgroundColor: '#fff', borderRadius: 12, padding: 15, marginBottom: 15, elevation: 3 },

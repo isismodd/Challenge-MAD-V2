@@ -21,16 +21,35 @@ export const consultaService = {
   create: async (consulta: ConsultaPayload) => (await api.post('/consultas', consulta)).data,
   update: async (id: string, consulta: Partial<ConsultaPayload>) =>
     (await api.put(`/consultas/${id}`, consulta)).data,
-  cancelar: async (id: string) => {
-    const { data } = await api.put(`/consultas/${id}`, { status: 'CANCELADA' });
+  // Cancela enviando o objeto completo
+  cancelar: async (consultaCompleta: any) => {
+    const payload = {
+      animalId: consultaCompleta.animalId,
+      veterinarioId: consultaCompleta.veterinarioId,
+      dataHora: consultaCompleta.dataHora,
+      motivo: consultaCompleta.motivo || '',
+      diagnostico: consultaCompleta.diagnostico || '',
+      prescricao: consultaCompleta.prescricao || '',
+      status: 'CANCELADA',
+    };
+    const { data } = await api.put(`/consultas/${consultaCompleta.id}`, payload);
     return data;
   },
-  finalizar: async (id: string) => {
-    const { data } = await api.put(`/consultas/${id}`, { status: 'REALIZADA' });
+  // Finaliza enviando o objeto completo
+  finalizar: async (consultaCompleta: any) => {
+    const payload = {
+      animalId: consultaCompleta.animalId,
+      veterinarioId: consultaCompleta.veterinarioId,
+      dataHora: consultaCompleta.dataHora,
+      motivo: consultaCompleta.motivo || '',
+      diagnostico: consultaCompleta.diagnostico || '',
+      prescricao: consultaCompleta.prescricao || '',
+      status: 'REALIZADA',
+    };
+    const { data } = await api.put(`/consultas/${consultaCompleta.id}`, payload);
     return data;
   },
   enviarLembrete: async (id: string) => {
-    // Este endpoint deve existir na sua API Java (ex: POST /api/lembretes ou /api/consultas/{id}/lembrete)
     const { data } = await api.post('/lembretes', { consultaId: id });
     return data;
   },

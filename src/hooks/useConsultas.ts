@@ -33,7 +33,7 @@ export function useAtualizarConsulta() {
 export function useCancelarConsulta() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => consultaService.cancelar(id),
+    mutationFn: (consultaCompleta: any) => consultaService.cancelar(consultaCompleta),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['consultas'] }),
   });
 }
@@ -41,7 +41,7 @@ export function useCancelarConsulta() {
 export function useFinalizarConsulta() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => consultaService.finalizar(id),
+    mutationFn: (consultaCompleta: any) => consultaService.finalizar(consultaCompleta),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['consultas'] }),
   });
 }
