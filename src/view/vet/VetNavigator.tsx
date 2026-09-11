@@ -4,14 +4,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { View, Text, Button, StyleSheet, Image } from 'react-native';
 import { useAuth } from '../../control/AuthContext';
 
-// Importação das telas
 import PerfilAnimaisScreen from './PerfilAnimaisScreen';
 import AgendaScreen from './AgendaScreen';
 import SaudePreventivaScreen from './SaudePreventivaScreen';
-import { IMAGES } from '../../assets';
-
-// ...
-<Image source={IMAGES.clyvoLogo} style={styles.logo} resizeMode="contain" />
 
 const Tab = createBottomTabNavigator();
 
@@ -21,23 +16,12 @@ function LogoHeader() {
     <View style={styles.headerContainer}>
       <Image
         source={require('../../../assets/clyvoLogo.png')}
-        style={{ width: 160, height: 50 }}
+        style={styles.logo}
         resizeMode="contain"
       />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  headerContainer: {
-    backgroundColor: '#2359D4',
-    paddingVertical: 15,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-  },
-  // ... outros estilos
-});
 
 function HomeScreen() {
   const { user, logout } = useAuth();
@@ -88,6 +72,7 @@ export default function VetNavigator() {
   );
 }
 
+// UMA ÚNICA declaração de styles, contendo TODOS os estilos usados
 const styles = StyleSheet.create({
   headerContainer: {
     backgroundColor: '#2359D4',
