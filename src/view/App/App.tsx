@@ -10,6 +10,7 @@ import CadastroScreen from '../../view/login/CadastroScreen';
 import VetNavigator from '../../view/vet/VetNavigator';
 import CadastroAnimalScreen from '../../view/vet/CadastroAnimalScreen';
 import CadastroConsultaScreen from '../../view/vet/CadastroConsultaScreen';
+import DetalhesAnimalScreen from '../../view/vet/DetalhesAnimalScreen';
 
 const Stack = createStackNavigator();
 const queryClient = new QueryClient({
@@ -39,6 +40,8 @@ function AppNavigator() {
             options={{ headerShown: true, title: 'Novo Animal' }} />
           <Stack.Screen name="EditarAnimal" component={CadastroAnimalScreen}
             options={{ headerShown: true, title: 'Editar Animal' }} />
+          <Stack.Screen name="DetalhesAnimal" component={DetalhesAnimalScreen}
+            options={{ headerShown: true, title: 'Detalhes do Animal' }} />
           <Stack.Screen name="NovaConsulta" component={CadastroConsultaScreen}
             options={{ headerShown: true, title: 'Nova Consulta' }} />
           <Stack.Screen name="EditarConsulta" component={CadastroConsultaScreen}
