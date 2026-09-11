@@ -21,13 +21,14 @@ export default function DetalhesConsultaScreen() {
   const finalizarConsulta = useFinalizarConsulta();
 
   const handleCancelar = () => {
+    if (!consulta) return;
     Alert.alert('Cancelar Consulta', 'Deseja realmente cancelar esta consulta?', [
       { text: 'Não', style: 'cancel' },
       {
         text: 'Sim',
         style: 'destructive',
         onPress: () =>
-          cancelarConsulta.mutate(consultaId, {
+          cancelarConsulta.mutate(consulta, {
             onSuccess: () => {
               Alert.alert('Sucesso', 'Consulta cancelada!');
               navigation.goBack();
@@ -39,12 +40,13 @@ export default function DetalhesConsultaScreen() {
   };
 
   const handleFinalizar = () => {
+    if (!consulta) return;
     Alert.alert('Finalizar Consulta', 'Marcar esta consulta como realizada?', [
       { text: 'Não', style: 'cancel' },
       {
         text: 'Sim',
         onPress: () =>
-          finalizarConsulta.mutate(consultaId, {
+          finalizarConsulta.mutate(consulta, {
             onSuccess: () => {
               Alert.alert('Sucesso', 'Consulta finalizada!');
               navigation.goBack();
