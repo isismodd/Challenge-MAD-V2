@@ -2,7 +2,12 @@ import React, { createContext, useState, useContext, useEffect, ReactNode } from
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { authService } from '../services/authService';
 
-type User = { id: string; nome: string; email: string; role: 'ADMIN' | 'VETERINARIO'; };
+type User = {
+  id: number;
+  nome: string;
+  email: string;
+  role: 'ADMIN' | 'VETERINARIO';
+};
 type AuthContextData = {
   user: User | null; loading: boolean;
   login: (email: string, senha: string) => Promise<boolean>;
@@ -26,21 +31,50 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     finally { setLoading(false); }
   };
 
-  const login = async (email: string, senha: string): Promise<boolean> => {
-    setLoading(true);
-    try {
-      const data = await authService.login(email, senha);
-      const loggedUser: User = {
-        id: data.user.id, nome: data.user.nome,
-        email: data.user.email, role: data.user.role,
-      };
+ const login = async (email: string, senha: string): Promise<boolean> => {
+  setLoading(true);
+
+  try {
+    const data = await authService.login(email, senha);
+
+    console.log('DATA RECEBIDO:', data);
+    console.log('USER RECEBIDO:', data?.user);
+    console.log('TOKEN RECEBIDO:', data?.token);
+
+    if (!data?.user) {
+      console.log('A API não retornou user.');
+      return false;
+    }
+
+    const loggedUser: User = {
+      id: String(data.user.id),
+      nome: data.user.nome,
+      email: data.user.email,
+      role: data.user.role,
+    };
+
+    if (data.token) {
       await AsyncStorage.setItem('@ClyvoPet:token', data.token);
-      await AsyncStorage.setItem('@ClyvoPet:userData', JSON.stringify(loggedUser));
-      setUser(loggedUser);
-      return true;
-    } catch (e) { console.log('Erro login:', e); return false; }
-    finally { setLoading(false); }
-  };
+    }
+
+    await AsyncStorage.setItem(
+      '@ClyvoPet:userData',
+      JSON.stringify(loggedUser)
+    );
+
+    setUser(loggedUser);
+
+    return true;
+  } catch (e: any) {
+    console.log('Erro login:', e);
+    console.log('Status:', e.response?.status);
+    console.log('Resposta:', e.response?.data);
+
+    return false;
+  } finally {
+    setLoading(false);
+  }
+};
 
   const logout = async () => {
     setLoading(true);

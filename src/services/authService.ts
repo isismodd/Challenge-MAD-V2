@@ -10,13 +10,33 @@ export type CadastroPayload = {
 };
 
 export const authService = {
-  login: async (email: string, senha: string) => {
-    const { data } = await api.post('/auth/login', { email, senha });
+
+  login: async (
+    email: string,
+    senha: string
+  ) => {
+
+    const { data } = await api.post(
+      '/auth/login',
+      {
+        email,
+        senha,
+      }
+    );
+
     return data;
   },
-  cadastrar: async (payload: CadastroPayload) => {
-    // Este endpoint precisa existir na sua API Java: POST /api/veterinarios
-    const { data } = await api.post('/veterinarios', payload);
+
+  cadastrar: async (
+    payload: CadastroPayload
+  ) => {
+
+    const { data } = await api.post(
+      '/auth/register',
+      payload
+    );
+
     return data;
   },
+
 };

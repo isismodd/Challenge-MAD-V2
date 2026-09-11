@@ -37,7 +37,7 @@ export default function VetNavigator() {
     }}>
       <Tab.Screen name="Início" component={HomeScreen}
         options={{ tabBarIcon: () => <Text style={{ fontSize: 22 }}>🏠</Text> }} />
-      <Tab.Screen name="Animais" component={perfilAnimaisScreen}
+      <Tab.Screen name="Animais" component={PerfilAnimaisScreen}
         options={{ tabBarIcon: () => <Text style={{ fontSize: 22 }}>🐕</Text> }} />
       <Tab.Screen name="Agenda" component={AgendaScreen}
         options={{ tabBarIcon: () => <Text style={{ fontSize: 22 }}>📅</Text> }} />
