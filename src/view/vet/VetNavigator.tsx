@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import { useAuth } from '../../control/AuthContext';
 
-import perfilAnimaisScreen from './perfilAnimaisScreen';
+import PerfilAnimaisScreen from './PerfilAnimaisScreen';
 import AgendaScreen from './AgendaScreen';
 import SaudePreventivaScreen from './SaudePreventivaScreen';
 
