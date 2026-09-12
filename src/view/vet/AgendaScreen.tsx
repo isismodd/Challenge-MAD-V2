@@ -112,14 +112,14 @@ export default function AgendaScreen() {
             style={styles.btnVisualizar}
             onPress={() => navigation.navigate('DetalhesConsulta', { id: item.id })}
           >
-            <Text style={styles.btnText}>DETALHES</Text>
+            <Text style={styles.btnText}>Detalhes</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.btnEditar}
             onPress={() => navigation.navigate('EditarConsulta', { id: item.id })}
           >
-            <Text style={styles.btnText}>EDITAR</Text>
+            <Text style={styles.btnText}>Editar</Text>
           </TouchableOpacity>
 
           {agendada && (
@@ -127,7 +127,7 @@ export default function AgendaScreen() {
               style={styles.btnLembrete}
               onPress={() => handleEnviarLembrete(item.id)}
             >
-              <Text style={styles.btnText}>LEMBRETE</Text>
+              <Text style={styles.btnText}>Lembrete</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -139,14 +139,14 @@ export default function AgendaScreen() {
               style={styles.btnFinalizar}
               onPress={() => handleFinalizar(item)}
             >
-              <Text style={styles.btnText}>FINALIZAR</Text>
+              <Text style={styles.btnText}>Finalizar</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.btnCancelar}
               onPress={() => handleCancelar(item)}
             >
-              <Text style={styles.btnText}>CANCELAR</Text>
+              <Text style={styles.btnText}>Cancelar</Text>
             </TouchableOpacity>
           </View>
         )}

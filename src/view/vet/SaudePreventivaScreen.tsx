@@ -130,7 +130,7 @@ export default function SaudePreventivaScreen() {
           <Text style={styles.titulo}>Lembrete #{item.id}</Text>
           <View style={[styles.statusBadge, { backgroundColor: enviado ? '#10b981' : '#f59e0b' }]}>
             <Text style={styles.statusText}>
-              {enviado ? 'Enviado' : 'Pendente'}
+              {enviado ? 'ENVIADO' : 'PENDENTE'}
             </Text>
           </View>
         </View>
