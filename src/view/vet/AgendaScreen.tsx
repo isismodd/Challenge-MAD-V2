@@ -147,7 +147,7 @@ export default function AgendaScreen() {
               style={styles.btnCancelar}
               onPress={() => handleCancelar(item)}
             >
-              <Text style={styles.btnIcon}>Excluir</Text>
+              <Text style={styles.btnIcon}>Cancelar</Text>
             </TouchableOpacity>
           )}
         </View>
