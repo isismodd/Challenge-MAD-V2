@@ -165,7 +165,7 @@ export default function AgendaScreen() {
         style={styles.btnAdicionar}
         onPress={() => navigation.navigate('NovaConsulta')}
       >
-        <Text style={styles.btnAdicionarText}>+ NOVA CONSULTA</Text>
+        <Text style={styles.btnAdicionarText}>+ Nova Consulta</Text>
       </TouchableOpacity>
 
       <FlatList

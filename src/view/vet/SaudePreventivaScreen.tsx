@@ -197,7 +197,7 @@ export default function SaudePreventivaScreen() {
           {enviarTodos.isPending ? (
             <ActivityIndicator color="#fff" />
           ) : (
-            <Text style={styles.btnEnviarTodosText}>ENVIAR TODOS PENDENTES</Text>
+            <Text style={styles.btnEnviarTodosText}>Enviar Todos Pendentes</Text>
           )}
         </TouchableOpacity>
       </View>

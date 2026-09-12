@@ -29,7 +29,7 @@ function HomeScreen() {
 
   return (
     <ImageBackground
-      source={require('../../../assets/homeBG.jpg')}
+      source={require('../../../assets/homeBG.png')}
       style={styles.background}
       resizeMode="cover"
     >
@@ -43,7 +43,7 @@ function HomeScreen() {
 
         {/* Botão de Logout customizado */}
         <TouchableOpacity style={styles.logoutButton} onPress={logout}>
-          <Text style={styles.logoutButtonText}>LOGOUT</Text>
+          <Text style={styles.logoutButtonText}>Logout</Text>
         </TouchableOpacity>
       </View>
     </ImageBackground>
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   logoutButton: {
     marginTop: 20,
     width: '80%',
-    backgroundColor: '#e7edfd',
+    backgroundColor: '#b0c5ff',
     paddingVertical: 15,
     borderRadius: 8,
     alignItems: 'center',
