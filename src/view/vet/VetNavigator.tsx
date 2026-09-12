@@ -1,4 +1,3 @@
-// src/view/vet/VetNavigator.tsx
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { View, Text, Button, StyleSheet, Image } from 'react-native';
@@ -10,7 +9,6 @@ import SaudePreventivaScreen from './SaudePreventivaScreen';
 
 const Tab = createBottomTabNavigator();
 
-// Header customizado com a logo centralizada
 function LogoHeader() {
   return (
     <View style={styles.headerContainer}>
@@ -70,7 +68,6 @@ export default function VetNavigator() {
   );
 }
 
-// UMA ÚNICA declaração de styles, contendo TODOS os estilos usados
 const styles = StyleSheet.create({
   headerContainer: {
     backgroundColor: '#2359D4',

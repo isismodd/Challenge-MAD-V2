@@ -1,4 +1,3 @@
-// src/view/vet/SaudePreventivaScreen.tsx
 import React, { useState, useMemo } from 'react';
 import {
   View, Text, StyleSheet, FlatList, TouchableOpacity,
@@ -16,14 +15,13 @@ export default function SaudePreventivaScreen() {
 
   const lembretes = Array.isArray(lembretesData) ? lembretesData : [];
 
-  // Log para debug — mostra o JSON completo de cada lembrete
+  // Log para debug 
   React.useEffect(() => {
     if (lembretes.length > 0) {
       console.log('EXEMPLO DE LEMBRETE:', JSON.stringify(lembretes[0], null, 2));
     }
   }, [lembretes]);
 
-  // Função auxiliar: extrai o e-mail do lembrete tentando várias fontes
   const getEmail = (item: any): string => {
     return (
       item.tutorEmail ||
@@ -37,7 +35,6 @@ export default function SaudePreventivaScreen() {
     );
   };
 
-  // Função auxiliar: extrai o nome do animal
   const getAnimalNome = (item: any): string => {
     return (
       item.animalNome ||
@@ -48,7 +45,6 @@ export default function SaudePreventivaScreen() {
     );
   };
 
-  // Função auxiliar: extrai o nome do tutor
   const getTutorNome = (item: any): string => {
     return (
       item.tutorNome ||
@@ -59,13 +55,11 @@ export default function SaudePreventivaScreen() {
     );
   };
 
-  // Função auxiliar: verifica se o lembrete foi enviado
   const isEnviado = (item: any): boolean => {
     const valor = item.enviado ?? item.enviadoFlag ?? item.status;
     return valor === true || valor === 1 || valor === 'S' || valor === 'ENVIADO';
   };
 
-  // Painel de estatísticas
   const stats = useMemo(() => {
     const total = lembretes.length;
     const enviados = lembretes.filter((l: any) => isEnviado(l)).length;
@@ -73,7 +67,6 @@ export default function SaudePreventivaScreen() {
     return { total, enviados, pendentes };
   }, [lembretes]);
 
-  // Lista filtrada
   const lembretesFiltrados = useMemo(() => {
     if (filtro === 'pendentes') {
       return lembretes.filter((l: any) => !isEnviado(l));

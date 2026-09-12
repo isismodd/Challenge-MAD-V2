@@ -1,4 +1,3 @@
-// src/view/vet/CadastroConsultaScreen.tsx
 import React, { useState, useEffect } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, StyleSheet,
@@ -14,7 +13,7 @@ import { ConsultaPayload } from '../../services/consultaService';
 export default function CadastroConsultaScreen() {
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
-  const { user } = useAuth(); // ← Pega o usuário logado
+  const { user } = useAuth(); 
 
   const consultaId = route.params?.id;
   const isEdicao = !!consultaId;
@@ -27,7 +26,6 @@ export default function CadastroConsultaScreen() {
   const animais = Array.isArray(animaisData) ? animaisData : [];
   const veterinarios = Array.isArray(veterinariosData) ? veterinariosData : [];
 
-  // Se o veterinário logado não estiver na lista da API, adiciona ele manualmente
   const listaVeterinarios = React.useMemo(() => {
     if (!user) return veterinarios;
     const jaExiste = veterinarios.some((v: any) => Number(v.id) === Number(user.id));
@@ -40,7 +38,7 @@ export default function CadastroConsultaScreen() {
 
   const [form, setForm] = useState<ConsultaPayload>({
     animalId: 0,
-    veterinarioId: user?.id || 0, // ← Pré-seleciona o veterinário logado
+    veterinarioId: user?.id || 0, 
     dataHora: new Date().toISOString(),
     motivo: '',
     diagnostico: '',
@@ -48,7 +46,6 @@ export default function CadastroConsultaScreen() {
     status: 'AGENDADA',
   });
 
-  // Atualiza o veterinárioId quando o user carrega (caso o state inicial seja 0)
   useEffect(() => {
     if (user && !isEdicao && form.veterinarioId === 0) {
       setForm((prev) => ({ ...prev, veterinarioId: user.id }));

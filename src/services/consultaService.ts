@@ -35,7 +35,6 @@ export const consultaService = {
     const { data } = await api.put(`/consultas/${consultaCompleta.id}`, payload);
     return data;
   },
-  // Finaliza enviando o objeto completo
   finalizar: async (consultaCompleta: any) => {
     const payload = {
       animalId: consultaCompleta.animalId,

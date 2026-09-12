@@ -1,4 +1,3 @@
-// src/view/login/CadastroScreen.tsx
 import React, { useState } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, StyleSheet,

@@ -3,7 +3,6 @@ import api from './api';
 export const veterinarioService = {
   getAll: async () => {
     const { data } = await api.get('/veterinarios');
-    // Garante que sempre retorne um array, mesmo se a API retornar { content: [...] }
     if (Array.isArray(data)) return data;
     if (data && Array.isArray(data.content)) return data.content;
     return [];

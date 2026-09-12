@@ -1,4 +1,3 @@
-// src/view/vet/AgendaScreen.tsx
 import React from 'react';
 import {
   View, Text, StyleSheet, FlatList, TouchableOpacity,

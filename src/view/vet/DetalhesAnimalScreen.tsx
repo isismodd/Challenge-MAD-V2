@@ -1,4 +1,3 @@
-// src/view/vet/DetalhesAnimalScreen.tsx
 import React from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity,

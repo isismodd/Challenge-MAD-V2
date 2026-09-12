@@ -1,4 +1,3 @@
-// src/view/vet/PerfilAnimaisScreen.tsx
 import React from 'react';
 import {
   View, Text, StyleSheet, FlatList, TouchableOpacity,
