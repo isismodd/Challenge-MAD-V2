@@ -124,7 +124,7 @@ export default function DetalhesConsultaScreen() {
       <View style={styles.actions}>
         {agendada && (
           <TouchableOpacity style={styles.btnFinalizar} onPress={handleFinalizar}>
-            <Text style={styles.btnText}>✅ Finalizar</Text>
+            <Text style={styles.btnText}>Finalizar</Text>
           </TouchableOpacity>
         )}
 
@@ -132,12 +132,12 @@ export default function DetalhesConsultaScreen() {
           style={styles.btnEditar}
           onPress={() => navigation.navigate('EditarConsulta', { id: consulta.id })}
         >
-          <Text style={styles.btnText}>✏️ Editar</Text>
+          <Text style={styles.btnText}>Editar</Text>
         </TouchableOpacity>
 
         {agendada && (
           <TouchableOpacity style={styles.btnCancelar} onPress={handleCancelar}>
-            <Text style={styles.btnText}>❌ Cancelar</Text>
+            <Text style={styles.btnText}>Cancelar</Text>
           </TouchableOpacity>
         )}
       </View>
