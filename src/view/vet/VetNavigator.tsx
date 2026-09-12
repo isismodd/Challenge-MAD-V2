@@ -29,7 +29,7 @@ function HomeScreen() {
       <Text style={styles.subtitle}>Sistema de gestão para clínica veterinária</Text>
       
       <View style={styles.logoutButton}>
-        <Button title="Logout" onPress={logout} color="#ff4444" />
+        <Button title="Logout" onPress={logout} color="#e7edfd" />
       </View>
     </View>
   );
@@ -42,11 +42,11 @@ export default function VetNavigator() {
         headerShown: true,
         header: () => <LogoHeader />,
         headerStyle: {
-          backgroundColor: '#2359D4',
+          backgroundColor: '#6786ce',
           elevation: 0,
           shadowOpacity: 0,
         },
-        tabBarActiveTintColor: '#2359D4',
+        tabBarActiveTintColor: '#4673dd',
         tabBarInactiveTintColor: '#999',
         tabBarStyle: {
           backgroundColor: '#fff',
@@ -57,13 +57,13 @@ export default function VetNavigator() {
       }}
     >
       <Tab.Screen name="Início" component={HomeScreen}
-        options={{ tabBarIcon: () => <Text style={{ fontSize: 22 }}>🏠</Text> }} />
+        options={{ tabBarIcon: () => <Text style={{ fontSize: 22 }}>𖠿</Text> }} />
       <Tab.Screen name="Animais" component={PerfilAnimaisScreen}
-        options={{ tabBarIcon: () => <Text style={{ fontSize: 22 }}>🐕</Text> }} />
+        options={{ tabBarIcon: () => <Text style={{ fontSize: 22 }}>𐦐</Text> }} />
       <Tab.Screen name="Agenda" component={AgendaScreen}
         options={{ tabBarIcon: () => <Text style={{ fontSize: 22 }}>📅</Text> }} />
       <Tab.Screen name="Saúde" component={SaudePreventivaScreen}
-        options={{ tabBarIcon: () => <Text style={{ fontSize: 22 }}>🔔</Text> }} />
+        options={{ tabBarIcon: () => <Text style={{ fontSize: 22 }}>࿄</Text> }} />
     </Tab.Navigator>
   );
 }

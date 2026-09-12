@@ -22,7 +22,7 @@ function AppNavigator() {
   const { user, loading } = useAuth();
   if (loading) return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <ActivityIndicator size="large" color="#1e3a8a" />
+      <ActivityIndicator size="large" color="#35509a" />
     </View>
   );
 

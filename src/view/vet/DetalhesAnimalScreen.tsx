@@ -86,11 +86,11 @@ export default function DetalhesAnimalScreen() {
           style={styles.btnEditar}
           onPress={() => navigation.navigate('EditarAnimal', { id: animal.id })}
         >
-          <Text style={styles.btnText}>✏️ Editar</Text>
+          <Text style={styles.btnText}>Editar</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.btnExcluir} onPress={handleDeletar}>
-          <Text style={styles.btnText}>🗑️ Excluir</Text>
+          <Text style={styles.btnText}>Excluir</Text>
         </TouchableOpacity>
       </View>
 
@@ -110,8 +110,8 @@ const styles = StyleSheet.create({
   label: { flex: 1, fontWeight: 'bold', color: '#333' },
   valor: { flex: 2, color: '#555' },
   actions: { flexDirection: 'row', gap: 10, marginBottom: 15 },
-  btnEditar: { backgroundColor: '#f59e0b', padding: 15, borderRadius: 8, flex: 1, alignItems: 'center' },
-  btnExcluir: { backgroundColor: '#ef4444', padding: 15, borderRadius: 8, flex: 1, alignItems: 'center' },
+  btnEditar: { backgroundColor: '#3b82f6', padding: 15, borderRadius: 8, flex: 1, alignItems: 'center' },
+  btnExcluir: { backgroundColor: '#1e3a8a', padding: 15, borderRadius: 8, flex: 1, alignItems: 'center' },
   btnText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
   btnVoltar: { padding: 15, alignItems: 'center', marginBottom: 30 },
   btnVoltarText: { color: '#1e3a8a', fontWeight: 'bold', fontSize: 16 },

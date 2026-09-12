@@ -122,16 +122,18 @@ export default function AgendaScreen() {
             <Text style={styles.btnIcon}>Editar</Text>
           </TouchableOpacity>
 
+         
+
           {agendada && (
             <TouchableOpacity
-              style={styles.btnCancelar}
-              onPress={() => handleCancelar(item)}
+              style={styles.btnLembrete}
+              onPress={() => handleEnviarLembrete(item.id)}
             >
-              <Text style={styles.btnIcon}>Excluir</Text>
+              <Text style={styles.btnIcon}>Lembrete</Text>
             </TouchableOpacity>
           )}
 
-          {agendada && (
+{agendada && (
             <TouchableOpacity
               style={styles.btnFinalizar}
               onPress={() => handleFinalizar(item)}
@@ -140,12 +142,12 @@ export default function AgendaScreen() {
             </TouchableOpacity>
           )}
 
-          {agendada && (
+           {agendada && (
             <TouchableOpacity
-              style={styles.btnLembrete}
-              onPress={() => handleEnviarLembrete(item.id)}
+              style={styles.btnCancelar}
+              onPress={() => handleCancelar(item)}
             >
-              <Text style={styles.btnIcon}>Lembrete</Text>
+              <Text style={styles.btnIcon}>Excluir</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -195,10 +197,10 @@ const styles = StyleSheet.create({
   statusText: { color: '#fff', fontSize: 12, fontWeight: 'bold' },
   actions: { flexDirection: 'row', gap: 8, marginTop: 12, justifyContent: 'space-between' },
   btnVisualizar: { backgroundColor: '#3b82f6', padding: 10, borderRadius: 8, flex: 1, alignItems: 'center' },
-  btnEditar: { backgroundColor: '#f59e0b', padding: 10, borderRadius: 8, flex: 1, alignItems: 'center' },
-  btnCancelar: { backgroundColor: '#ef4444', padding: 10, borderRadius: 8, flex: 1, alignItems: 'center' },
-  btnFinalizar: { backgroundColor: '#10b981', padding: 10, borderRadius: 8, flex: 1, alignItems: 'center' },
-  btnLembrete: { backgroundColor: '#8b5cf6', padding: 10, borderRadius: 8, flex: 1, alignItems: 'center' },
+  btnEditar: { backgroundColor: '#3b82f6', padding: 10, borderRadius: 8, flex: 1, alignItems: 'center' },
+  btnCancelar: { backgroundColor: '#1e3a8a', padding: 10, borderRadius: 8, flex: 1, alignItems: 'center' },
+  btnFinalizar: { backgroundColor: '#1e3a8a', padding: 10, borderRadius: 8, flex: 1, alignItems: 'center' },
+  btnLembrete: { backgroundColor: '#3b82f6', padding: 10, borderRadius: 8, flex: 1, alignItems: 'center' },
   btnIcon: { fontSize: 18 },
   emptyText: { textAlign: 'center', marginTop: 50, color: '#999' },
   errorText: { color: '#ef4444', fontSize: 16, marginBottom: 10 },
