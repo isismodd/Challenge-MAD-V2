@@ -101,7 +101,7 @@ export default function DetalhesConsultaScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>📋 Detalhes da Consulta</Text>
+      <Text style={styles.title}>Detalhes da Consulta</Text>
 
       <View style={styles.card}>
         <Linha label="ID" valor={consulta.id} />

@@ -2,6 +2,7 @@ import React, { createContext, useState, useContext, useEffect, ReactNode } from
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { authService } from '../services/authService';
 
+
 type User = {
   id: number;
   nome: string;
@@ -47,7 +48,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const loggedUser: User = {
-      id: String(data.user.id),
+      id: Number(data.user.id),
       nome: data.user.nome,
       email: data.user.email,
       role: data.user.role,

@@ -87,7 +87,7 @@ export default function CadastroConsultaScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>{isEdicao ? '✏️ Editar Consulta' : '📅 Nova Consulta'}</Text>
+      <Text style={styles.title}>{isEdicao ? 'Editar Consulta' : 'Nova Consulta'}</Text>
 
       <Text style={styles.label}>Animal *</Text>
       <TouchableOpacity style={styles.select} onPress={() => setModalAnimalVisible(true)}>

@@ -65,7 +65,7 @@ export default function DetalhesAnimalScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>🐾 Detalhes do Animal</Text>
+      <Text style={styles.title}>Detalhes do Animal</Text>
 
       <View style={styles.card}>
         <Linha label="ID" valor={animal.id} />

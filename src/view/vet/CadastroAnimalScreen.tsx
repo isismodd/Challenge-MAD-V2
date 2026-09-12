@@ -75,7 +75,7 @@ export default function CadastroAnimalScreen() {
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>
-        {isEdicao ? '✏️ Editar Animal' : '🐾 Novo Animal'}
+        {isEdicao ? 'Editar Animal' : 'Novo Animal'}
       </Text>
 
       <Text style={styles.sectionTitle}>Dados do Animal</Text>

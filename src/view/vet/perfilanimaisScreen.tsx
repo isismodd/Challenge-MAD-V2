@@ -57,21 +57,21 @@ export default function PerfilAnimaisScreen() {
           style={styles.btnVisualizar}
           onPress={() => navigation.navigate('DetalhesAnimal', { id: item.id })}
         >
-          <Text style={styles.btnText}>👁️ Ver</Text>
+          <Text style={styles.btnText}>Detalhes</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.btnEditar}
           onPress={() => navigation.navigate('EditarAnimal', { id: item.id })}
         >
-          <Text style={styles.btnText}>✏️ Editar</Text>
+          <Text style={styles.btnText}>Editar</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.btnExcluir}
           onPress={() => handleDeletar(item.id, item.nome)}
         >
-          <Text style={styles.btnText}>🗑️ Excluir</Text>
+          <Text style={styles.btnText}>Excluir</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -80,7 +80,7 @@ export default function PerfilAnimaisScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>🐾 Lista de Animais</Text>
+        <Text style={styles.title}>Lista de Animais</Text>
       </View>
 
       {/* Botão Adicionar Animal */}

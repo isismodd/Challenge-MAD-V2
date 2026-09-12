@@ -138,16 +138,16 @@ export default function SaudePreventivaScreen() {
           <Text style={styles.titulo}>Lembrete #{item.id}</Text>
           <View style={[styles.statusBadge, { backgroundColor: enviado ? '#10b981' : '#f59e0b' }]}>
             <Text style={styles.statusText}>
-              {enviado ? '✅ Enviado' : '⏰ Pendente'}
+              {enviado ? 'Enviado' : 'Pendente'}
             </Text>
           </View>
         </View>
 
-        <Text style={styles.info}>🐾 Animal: {animalNome}</Text>
-        <Text style={styles.info}>👤 Tutor: {tutorNome}</Text>
-        <Text style={styles.info}>📧 E-mail: {email}</Text>
+        <Text style={styles.info}>Animal: {animalNome}</Text>
+        <Text style={styles.info}>Tutor: {tutorNome}</Text>
+        <Text style={styles.info}>E-mail: {email}</Text>
         <Text style={styles.info}>
-          📅 {item.dataEnvio ? new Date(item.dataEnvio).toLocaleString('pt-BR') : '-'}
+          Data de Envio: {item.dataEnvio ? new Date(item.dataEnvio).toLocaleString('pt-BR') : '-'}
         </Text>
       </View>
     );
@@ -156,7 +156,7 @@ export default function SaudePreventivaScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>🔔 Lembretes</Text>
+        <Text style={styles.title}>Lembretes</Text>
       </View>
 
       {/* Painel de Estatísticas */}
@@ -204,7 +204,7 @@ export default function SaudePreventivaScreen() {
           {enviarTodos.isPending ? (
             <ActivityIndicator color="#fff" />
           ) : (
-            <Text style={styles.btnEnviarTodosText}>📧 Enviar Todos Pendentes</Text>
+            <Text style={styles.btnEnviarTodosText}>Enviar Todos Pendentes</Text>
           )}
         </TouchableOpacity>
       </View>

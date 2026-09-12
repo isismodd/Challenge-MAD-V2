@@ -12,6 +12,7 @@ import {
   useEnviarLembrete,
 } from '../../hooks/useConsultas';
 
+
 export default function AgendaScreen() {
   const navigation = useNavigation<any>();
   const { data: consultasData, isLoading, isError, refetch } = useConsultas();
@@ -98,9 +99,9 @@ export default function AgendaScreen() {
     return (
       <View style={styles.card}>
         <Text style={styles.animalNome}>{item.animalNome || 'Animal'}</Text>
-        <Text style={styles.info}>👤 {item.veterinarioNome || 'Veterinário'}</Text>
+        <Text style={styles.info}>Veterinário: {item.veterinarioNome || 'Veterinário'}</Text>
         <Text style={styles.info}>
-          📅 {item.dataHora ? new Date(item.dataHora).toLocaleString('pt-BR') : '-'}
+          Data e hora: {item.dataHora ? new Date(item.dataHora).toLocaleString('pt-BR') : '-'}
         </Text>
 
         <View style={[styles.statusBadge, { backgroundColor: getStatusColor(item.status) }]}>
@@ -156,7 +157,7 @@ export default function AgendaScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>📅 Consultas</Text>
+        <Text style={styles.title}>Consultas</Text>
       </View>
 
       <TouchableOpacity
