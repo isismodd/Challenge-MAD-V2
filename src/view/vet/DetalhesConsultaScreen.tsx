@@ -120,7 +120,7 @@ export default function DetalhesConsultaScreen() {
         <Linha label="Prescrição" valor={consulta.prescricao} />
       </View>
 
-      {/* Botões de ação */}
+      {}
       <View style={styles.actions}>
        
 

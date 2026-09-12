@@ -1,4 +1,3 @@
-// src/view/login/CadastroScreen.tsx
 import React, { useState } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, StyleSheet,
@@ -50,10 +49,10 @@ export default function CadastroScreen() {
       style={styles.background}
       resizeMode="cover"
     >
-      {/* Overlay preto 50% */}
+      {}
       <View style={styles.overlay} />
 
-      {/* Conteúdo */}
+      {}
       <ScrollView
         style={styles.scrollContainer}
         contentContainerStyle={styles.content}

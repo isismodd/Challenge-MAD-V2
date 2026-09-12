@@ -1,4 +1,3 @@
-// src/view/vet/VetNavigator.tsx
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { View, Text, TouchableOpacity, StyleSheet, Image, ImageBackground } from 'react-native';
@@ -10,7 +9,6 @@ import SaudePreventivaScreen from './SaudePreventivaScreen';
 
 const Tab = createBottomTabNavigator();
 
-// Header customizado com a logo centralizada
 function LogoHeader() {
   return (
     <View style={styles.headerContainer}>
@@ -23,7 +21,6 @@ function LogoHeader() {
   );
 }
 
-// Tela de Início com imagem de fundo + overlay preto
 function HomeScreen() {
   const { logout } = useAuth();
 
@@ -33,15 +30,15 @@ function HomeScreen() {
       style={styles.background}
       resizeMode="cover"
     >
-      {/* Overlay preto com 50% de opacidade */}
+      {}
       <View style={styles.overlay} />
 
-      {/* Conteúdo da Home */}
+      {}
       <View style={styles.content}>
         <Text style={styles.welcome}>Bem-vindo ao ClyvoPet</Text>
         <Text style={styles.subtitle}>Sistema de gestão para clínica veterinária</Text>
 
-        {/* Botão de Logout customizado */}
+        {}
         <TouchableOpacity style={styles.logoutButton} onPress={logout}>
           <Text style={styles.logoutButtonText}>Logout</Text>
         </TouchableOpacity>
@@ -95,18 +92,15 @@ const styles = StyleSheet.create({
     width: 160,
     height: 50,
   },
-  // Imagem de fundo ocupando toda a tela
   background: {
     flex: 1,
     width: '100%',
     height: '100%',
   },
-  // Overlay preto com 50% de opacidade
   overlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-  // Conteúdo por cima do overlay
   content: {
     flex: 1,
     justifyContent: 'center',
@@ -126,7 +120,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 40,
   },
-  // Botão de logout customizado
   logoutButton: {
     marginTop: 20,
     width: '80%',
@@ -137,7 +130,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logoutButtonText: {
-    color: '#112942',       // ← Cor do texto solicitada
+    color: '#112942',      
     fontWeight: 'bold',
     fontSize: 16,
   },

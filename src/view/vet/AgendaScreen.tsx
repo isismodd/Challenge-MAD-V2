@@ -1,4 +1,3 @@
-// src/view/vet/AgendaScreen.tsx
 import React from 'react';
 import {
   View, Text, StyleSheet, FlatList, TouchableOpacity,
@@ -107,7 +106,7 @@ export default function AgendaScreen() {
           <Text style={styles.statusText}>{item.status}</Text>
         </View>
 
-        {/* Linha 1: DETALHES | EDITAR | LEMBRETE */}
+        {}
         <View style={styles.actionsRow}>
           <TouchableOpacity
             style={styles.btnVisualizar}
@@ -133,7 +132,7 @@ export default function AgendaScreen() {
           )}
         </View>
 
-        {/* Linha 2: FINALIZAR | CANCELAR */}
+        {}
         {agendada && (
           <View style={styles.actionsRow}>
             <TouchableOpacity
@@ -203,7 +202,6 @@ const styles = StyleSheet.create({
   statusBadge: { alignSelf: 'flex-start', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12, marginTop: 5 },
   statusText: { color: '#fff', fontSize: 12, fontWeight: 'bold' },
 
-  // Linha de botões (usada duas vezes: 3 botões e depois 2 botões)
   actionsRow: {
     flexDirection: 'row',
     gap: 8,
@@ -211,7 +209,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
 
-  // Botões padronizados (mesmo tamanho e fonte dos da PerfilAnimaisScreen)
   btnVisualizar: { backgroundColor: '#3b82f6', padding: 10, borderRadius: 8, flex: 1, alignItems: 'center' },
   btnEditar:     { backgroundColor: '#3b82f6', padding: 10, borderRadius: 8, flex: 1, alignItems: 'center' },
   btnLembrete:   { backgroundColor: '#3b82f6', padding: 10, borderRadius: 8, flex: 1, alignItems: 'center' },

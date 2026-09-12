@@ -132,7 +132,7 @@ export default function CadastroConsultaScreen() {
         <Text style={styles.cancelText}>Cancelar</Text>
       </TouchableOpacity>
 
-      {/* Modal de Animais */}
+      {}
       <Modal visible={modalAnimalVisible} transparent animationType="slide">
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
@@ -157,7 +157,7 @@ export default function CadastroConsultaScreen() {
         </View>
       </Modal>
 
-      {/* Modal de Veterinários */}
+      {}
       <Modal visible={modalVetVisible} transparent animationType="slide">
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>

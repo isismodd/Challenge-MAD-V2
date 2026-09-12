@@ -82,7 +82,7 @@ export default function PerfilAnimaisScreen() {
         <Text style={styles.title}>Lista de Animais</Text>
       </View>
 
-      {/* Botão Adicionar Animal */}
+      {}
       <TouchableOpacity
         style={styles.btnAdicionar}
         onPress={() => navigation.navigate('CadastroAnimal')}

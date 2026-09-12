@@ -1,4 +1,3 @@
-// src/view/login/LoginScreen.tsx
 import React, { useState } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, StyleSheet,
@@ -25,10 +24,10 @@ export default function LoginScreen() {
       style={styles.background}
       resizeMode="cover"
     >
-      {/* Overlay preto 50% */}
+      {}
       <View style={styles.overlay} />
 
-      {/* Conteúdo */}
+      {}
       <View style={styles.container}>
         <Text style={styles.title}>ClyvoPet</Text>
         <Text style={styles.subtitle}>Bem-vindo!</Text>

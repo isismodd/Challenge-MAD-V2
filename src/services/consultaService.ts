@@ -21,7 +21,7 @@ export const consultaService = {
   create: async (consulta: ConsultaPayload) => (await api.post('/consultas', consulta)).data,
   update: async (id: string, consulta: Partial<ConsultaPayload>) =>
     (await api.put(`/consultas/${id}`, consulta)).data,
-  // Cancela enviando o objeto completo
+
   cancelar: async (consultaCompleta: any) => {
     const payload = {
       animalId: consultaCompleta.animalId,

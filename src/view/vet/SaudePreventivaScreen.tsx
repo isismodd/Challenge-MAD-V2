@@ -15,7 +15,6 @@ export default function SaudePreventivaScreen() {
 
   const lembretes = Array.isArray(lembretesData) ? lembretesData : [];
 
-  // Log para debug 
   React.useEffect(() => {
     if (lembretes.length > 0) {
       console.log('EXEMPLO DE LEMBRETE:', JSON.stringify(lembretes[0], null, 2));
@@ -152,7 +151,7 @@ export default function SaudePreventivaScreen() {
         <Text style={styles.title}>Lembretes</Text>
       </View>
 
-      {/* Painel de Estatísticas */}
+      {}
       <View style={styles.statsContainer}>
         <View style={styles.statCard}>
           <Text style={styles.statLabel}>Total</Text>
@@ -168,7 +167,7 @@ export default function SaudePreventivaScreen() {
         </View>
       </View>
 
-      {/* Botões de ação */}
+      {}
       <View style={styles.actionsContainer}>
         <View style={styles.toggleContainer}>
           <TouchableOpacity
