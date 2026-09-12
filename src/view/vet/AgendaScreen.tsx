@@ -1,3 +1,4 @@
+// src/view/vet/AgendaScreen.tsx
 import React from 'react';
 import {
   View, Text, StyleSheet, FlatList, TouchableOpacity,
@@ -10,7 +11,6 @@ import {
   useFinalizarConsulta,
   useEnviarLembrete,
 } from '../../hooks/useConsultas';
-
 
 export default function AgendaScreen() {
   const navigation = useNavigation<any>();
@@ -107,50 +107,50 @@ export default function AgendaScreen() {
           <Text style={styles.statusText}>{item.status}</Text>
         </View>
 
-        <View style={styles.actions}>
+        {/* Linha 1: DETALHES | EDITAR | LEMBRETE */}
+        <View style={styles.actionsRow}>
           <TouchableOpacity
             style={styles.btnVisualizar}
             onPress={() => navigation.navigate('DetalhesConsulta', { id: item.id })}
           >
-            <Text style={styles.btnIcon}>Detalhes</Text>
+            <Text style={styles.btnText}>DETALHES</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.btnEditar}
             onPress={() => navigation.navigate('EditarConsulta', { id: item.id })}
           >
-            <Text style={styles.btnIcon}>Editar</Text>
+            <Text style={styles.btnText}>EDITAR</Text>
           </TouchableOpacity>
-
-         
 
           {agendada && (
             <TouchableOpacity
               style={styles.btnLembrete}
               onPress={() => handleEnviarLembrete(item.id)}
             >
-              <Text style={styles.btnIcon}>Lembrete</Text>
+              <Text style={styles.btnText}>LEMBRETE</Text>
             </TouchableOpacity>
           )}
+        </View>
 
-{agendada && (
+        {/* Linha 2: FINALIZAR | CANCELAR */}
+        {agendada && (
+          <View style={styles.actionsRow}>
             <TouchableOpacity
               style={styles.btnFinalizar}
               onPress={() => handleFinalizar(item)}
             >
-              <Text style={styles.btnIcon}>Finalizar</Text>
+              <Text style={styles.btnText}>FINALIZAR</Text>
             </TouchableOpacity>
-          )}
 
-           {agendada && (
             <TouchableOpacity
               style={styles.btnCancelar}
               onPress={() => handleCancelar(item)}
             >
-              <Text style={styles.btnIcon}>Cancelar</Text>
+              <Text style={styles.btnText}>CANCELAR</Text>
             </TouchableOpacity>
-          )}
-        </View>
+          </View>
+        )}
       </View>
     );
   };
@@ -187,7 +187,14 @@ const styles = StyleSheet.create({
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   header: { backgroundColor: '#60a5fa', padding: 20 },
   title: { fontSize: 24, fontWeight: 'bold', color: '#fff', textAlign: 'center' },
-  btnAdicionar: { backgroundColor: '#1e3a8a', padding: 15, marginHorizontal: 15, marginTop: 15, borderRadius: 8, alignItems: 'center' },
+  btnAdicionar: {
+    backgroundColor: '#1e3a8a',
+    padding: 15,
+    marginHorizontal: 15,
+    marginTop: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
   btnAdicionarText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
   listContent: { padding: 15 },
   card: { backgroundColor: '#fff', borderRadius: 12, padding: 15, marginBottom: 15, elevation: 3 },
@@ -195,13 +202,24 @@ const styles = StyleSheet.create({
   info: { fontSize: 14, color: '#666', marginBottom: 3 },
   statusBadge: { alignSelf: 'flex-start', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12, marginTop: 5 },
   statusText: { color: '#fff', fontSize: 12, fontWeight: 'bold' },
-  actions: { flexDirection: 'row', gap: 8, marginTop: 12, justifyContent: 'space-between' },
+
+  // Linha de botões (usada duas vezes: 3 botões e depois 2 botões)
+  actionsRow: {
+    flexDirection: 'row',
+    gap: 8,
+    marginTop: 10,
+    justifyContent: 'space-between',
+  },
+
+  // Botões padronizados (mesmo tamanho e fonte dos da PerfilAnimaisScreen)
   btnVisualizar: { backgroundColor: '#3b82f6', padding: 10, borderRadius: 8, flex: 1, alignItems: 'center' },
-  btnEditar: { backgroundColor: '#3b82f6', padding: 10, borderRadius: 8, flex: 1, alignItems: 'center' },
-  btnCancelar: { backgroundColor: '#1e3a8a', padding: 10, borderRadius: 8, flex: 1, alignItems: 'center' },
-  btnFinalizar: { backgroundColor: '#1e3a8a', padding: 10, borderRadius: 8, flex: 1, alignItems: 'center' },
-  btnLembrete: { backgroundColor: '#3b82f6', padding: 10, borderRadius: 8, flex: 1, alignItems: 'center' },
-  btnIcon: { fontSize: 18 },
+  btnEditar:     { backgroundColor: '#3b82f6', padding: 10, borderRadius: 8, flex: 1, alignItems: 'center' },
+  btnLembrete:   { backgroundColor: '#3b82f6', padding: 10, borderRadius: 8, flex: 1, alignItems: 'center' },
+  btnFinalizar:  { backgroundColor: '#1e3a8a', padding: 10, borderRadius: 8, flex: 1, alignItems: 'center' },
+  btnCancelar:   { backgroundColor: '#1e3a8a', padding: 10, borderRadius: 8, flex: 1, alignItems: 'center' },
+
+  btnText: { color: '#fff', fontWeight: 'bold', fontSize: 12 },
+
   emptyText: { textAlign: 'center', marginTop: 50, color: '#999' },
   errorText: { color: '#ef4444', fontSize: 16, marginBottom: 10 },
   retryText: { color: '#1e3a8a', fontWeight: 'bold' },

@@ -122,11 +122,7 @@ export default function DetalhesConsultaScreen() {
 
       {/* Botões de ação */}
       <View style={styles.actions}>
-        {agendada && (
-          <TouchableOpacity style={styles.btnFinalizar} onPress={handleFinalizar}>
-            <Text style={styles.btnText}>Finalizar</Text>
-          </TouchableOpacity>
-        )}
+       
 
         <TouchableOpacity
           style={styles.btnEditar}
@@ -134,6 +130,12 @@ export default function DetalhesConsultaScreen() {
         >
           <Text style={styles.btnText}>Editar</Text>
         </TouchableOpacity>
+
+         {agendada && (
+          <TouchableOpacity style={styles.btnFinalizar} onPress={handleFinalizar}>
+            <Text style={styles.btnText}>Finalizar</Text>
+          </TouchableOpacity>
+        )}
 
         {agendada && (
           <TouchableOpacity style={styles.btnCancelar} onPress={handleCancelar}>
@@ -160,7 +162,7 @@ const styles = StyleSheet.create({
   statusBadge: { paddingHorizontal: 12, paddingVertical: 5, borderRadius: 12 },
   statusText: { color: '#fff', fontWeight: 'bold', fontSize: 12 },
   actions: { flexDirection: 'row', gap: 10, marginBottom: 15 },
-  btnFinalizar: { backgroundColor: '#3b82f6', padding: 15, borderRadius: 8, flex: 1, alignItems: 'center' },
+  btnFinalizar: { backgroundColor: '#1e3a8a', padding: 15, borderRadius: 8, flex: 1, alignItems: 'center' },
   btnEditar: { backgroundColor: '#3b82f6', padding: 15, borderRadius: 8, flex: 1, alignItems: 'center' },
   btnCancelar: { backgroundColor: '#1e3a8a', padding: 15, borderRadius: 8, flex: 1, alignItems: 'center' },
   btnText: { color: '#fff', fontWeight: 'bold', fontSize: 14 },
