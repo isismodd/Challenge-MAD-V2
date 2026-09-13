@@ -183,7 +183,6 @@ npm run android
 -O cache é gerenciado pelo TanStack Query (atualização automática após mutações).
 
 -O app é exclusivo para veterinários (não há perfil de tutor).
-```
 
 ## Backend
 -O backend do ClyvoPet foi desenvolvido em Java Spring Boot e está hospedado no Microsoft Azure App Service.
@@ -202,5 +201,5 @@ Isis Macedo | RM 561497
 Henrique Pereira | RM 565608
 Rafael Carvalho Meireles | RM 563413
 
-**Link do vídeo no YouTube:**
+**Link do vídeo no YouTube:** https://youtu.be/HKr7M8sSTo8
 **Link do Repositório:** https://github.com/isismodd/Challenge-MAD-V2.git
