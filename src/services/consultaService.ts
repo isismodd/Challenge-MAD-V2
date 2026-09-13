@@ -13,14 +13,39 @@ export type ConsultaPayload = {
 export const consultaService = {
   getAll: async () => {
     const { data } = await api.get('/consultas');
-    if (Array.isArray(data)) return data;
-    if (data && Array.isArray(data.content)) return data.content;
+
+    if (Array.isArray(data)) {
+      return data;
+    }
+
+    if (data && Array.isArray(data.content)) {
+      return data.content;
+    }
+
     return [];
   },
-  getById: async (id: string) => (await api.get(`/consultas/${id}`)).data,
-  create: async (consulta: ConsultaPayload) => (await api.post('/consultas', consulta)).data,
-  update: async (id: string, consulta: Partial<ConsultaPayload>) =>
-    (await api.put(`/consultas/${id}`, consulta)).data,
+
+  getById: async (id: string) => {
+    const { data } = await api.get(`/consultas/${id}`);
+    return data;
+  },
+
+  create: async (consulta: ConsultaPayload) => {
+    const { data } = await api.post('/consultas', consulta);
+    return data;
+  },
+
+  update: async (
+    id: string,
+    consulta: Partial<ConsultaPayload>
+  ) => {
+    const { data } = await api.put(
+      `/consultas/${id}`,
+      consulta
+    );
+
+    return data;
+  },
 
   cancelar: async (consultaCompleta: any) => {
     const payload = {
@@ -32,9 +57,15 @@ export const consultaService = {
       prescricao: consultaCompleta.prescricao || '',
       status: 'CANCELADA',
     };
-    const { data } = await api.put(`/consultas/${consultaCompleta.id}`, payload);
+
+    const { data } = await api.put(
+      `/consultas/${consultaCompleta.id}`,
+      payload
+    );
+
     return data;
   },
+
   finalizar: async (consultaCompleta: any) => {
     const payload = {
       animalId: consultaCompleta.animalId,
@@ -45,12 +76,26 @@ export const consultaService = {
       prescricao: consultaCompleta.prescricao || '',
       status: 'REALIZADA',
     };
-    const { data } = await api.put(`/consultas/${consultaCompleta.id}`, payload);
+
+    const { data } = await api.put(
+      `/consultas/${consultaCompleta.id}`,
+      payload
+    );
+
     return data;
   },
+
+  // Cria o lembrete completo usando os dados
+  // da consulta e do animal no backend
   enviarLembrete: async (id: string) => {
-    const { data } = await api.post('/lembretes', { consultaId: id });
+    const { data } = await api.post(
+      `/lembretes/criar/${id}`
+    );
+
     return data;
   },
-  delete: async (id: string) => { await api.delete(`/consultas/${id}`); },
+
+  delete: async (id: string) => {
+    await api.delete(`/consultas/${id}`);
+  },
 };

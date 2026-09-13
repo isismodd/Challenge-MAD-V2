@@ -1,63 +1,133 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { consultaService, ConsultaPayload } from '../services/consultaService';
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
+
+import {
+  consultaService,
+  ConsultaPayload,
+} from '../services/consultaService';
 
 export function useConsultas() {
-  return useQuery({ queryKey: ['consultas'], queryFn: consultaService.getAll });
+  return useQuery({
+    queryKey: ['consultas'],
+    queryFn: consultaService.getAll,
+  });
 }
 
 export function useConsulta(id: string) {
   return useQuery({
     queryKey: ['consultas', id],
-    queryFn: () => consultaService.getById(id),
+    queryFn: () =>
+      consultaService.getById(id),
     enabled: !!id,
   });
 }
 
 export function useCriarConsulta() {
-  const qc = useQueryClient();
+  const queryClient = useQueryClient();
+
   return useMutation({
-    mutationFn: (c: ConsultaPayload) => consultaService.create(c),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['consultas'] }),
+    mutationFn: (consulta: ConsultaPayload) =>
+      consultaService.create(consulta),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['consultas'],
+      });
+    },
   });
 }
 
 export function useAtualizarConsulta() {
-  const qc = useQueryClient();
+  const queryClient = useQueryClient();
+
   return useMutation({
-    mutationFn: ({ id, consulta }: { id: string; consulta: Partial<ConsultaPayload> }) =>
-      consultaService.update(id, consulta),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['consultas'] }),
+    mutationFn: ({
+      id,
+      consulta,
+    }: {
+      id: string;
+      consulta: Partial<ConsultaPayload>;
+    }) =>
+      consultaService.update(
+        id,
+        consulta
+      ),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['consultas'],
+      });
+    },
   });
 }
 
 export function useCancelarConsulta() {
-  const qc = useQueryClient();
+  const queryClient = useQueryClient();
+
   return useMutation({
-    mutationFn: (consultaCompleta: any) => consultaService.cancelar(consultaCompleta),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['consultas'] }),
+    mutationFn: (consultaCompleta: any) =>
+      consultaService.cancelar(
+        consultaCompleta
+      ),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['consultas'],
+      });
+    },
   });
 }
 
 export function useFinalizarConsulta() {
-  const qc = useQueryClient();
+  const queryClient = useQueryClient();
+
   return useMutation({
-    mutationFn: (consultaCompleta: any) => consultaService.finalizar(consultaCompleta),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['consultas'] }),
+    mutationFn: (consultaCompleta: any) =>
+      consultaService.finalizar(
+        consultaCompleta
+      ),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['consultas'],
+      });
+    },
   });
 }
 
 export function useEnviarLembrete() {
-  const qc = useQueryClient();
+  const queryClient = useQueryClient();
+
   return useMutation({
-    mutationFn: (id: string) => consultaService.enviarLembrete(id),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['consultas'] }),
+    mutationFn: (id: string) =>
+      consultaService.enviarLembrete(id),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['consultas'],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ['lembretes'],
+      });
+    },
   });
 }
 
 export function useDeletarConsulta() {
-  const qc = useQueryClient();
+  const queryClient = useQueryClient();
+
   return useMutation({
-    mutationFn: (id: string) => consultaService.delete(id),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['consultas'] }),
+    mutationFn: (id: string) =>
+      consultaService.delete(id),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['consultas'],
+      });
+    },
   });
 }
