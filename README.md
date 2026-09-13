@@ -61,6 +61,7 @@ Challenge-MAD-V2/
 ├── assets/ # Imagens e ícones
 │ ├── clyvoLogo.png
 │ └── homeBG.jpg
+│ └── loginBG.jpg
 ├── src/
 │ ├── control/
 │ │ └── AuthContext.tsx # Autenticação + persistência de sessão
@@ -84,7 +85,6 @@ Challenge-MAD-V2/
 │ │ └── CadastroScreen.tsx
 │ └── vet/
 │ ├── VetNavigator.tsx # Navegação por abas
-│ ├── HomeScreen.tsx
 │ ├── PerfilAnimaisScreen.tsx
 │ ├── CadastroAnimalScreen.tsx
 │ ├── DetalhesAnimalScreen.tsx
@@ -203,3 +203,4 @@ Henrique Pereira | RM 565608
 Rafael Carvalho Meireles | RM 563413
 
 **Link do vídeo no YouTube:**
+**Link do Repositório:** https://github.com/isismodd/Challenge-MAD-V2.git
