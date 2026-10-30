@@ -12,6 +12,7 @@ import CadastroAnimalScreen from '../../view/vet/CadastroAnimalScreen';
 import DetalhesAnimalScreen from '../../view/vet/DetalhesAnimalScreen';
 import CadastroConsultaScreen from '../../view/vet/CadastroConsultaScreen';
 import DetalhesConsultaScreen from '../../view/vet/DetalhesConsultaScreen';
+import SobreScreen from '../../view/vet/SobreScreen'; // <-- NOVO IMPORT
 
 const Stack = createStackNavigator();
 const queryClient = new QueryClient({
@@ -20,6 +21,7 @@ const queryClient = new QueryClient({
 
 function AppNavigator() {
   const { user, loading } = useAuth();
+  
   if (loading) return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <ActivityIndicator size="large" color="#35509a" />
@@ -36,7 +38,7 @@ function AppNavigator() {
         </>
       ) : (
         <>
-          <Stack.Screen name="VetApp" component={VetNavigator} />
+          <Stack.Screen name="VetApp" component={VetNavigator} options={{ headerShown: false }} />
           <Stack.Screen name="CadastroAnimal" component={CadastroAnimalScreen}
             options={{ headerShown: true, title: 'Novo Animal' }} />
           <Stack.Screen name="EditarAnimal" component={CadastroAnimalScreen}
@@ -49,6 +51,10 @@ function AppNavigator() {
             options={{ headerShown: true, title: 'Editar Consulta' }} />
           <Stack.Screen name="DetalhesConsulta" component={DetalhesConsultaScreen}
             options={{ headerShown: true, title: 'Detalhes da Consulta' }} />
+          
+          {/* NOVA ROTA AQUI */}
+          <Stack.Screen name="Sobre" component={SobreScreen}
+            options={{ headerShown: true, title: 'Sobre o App' }} />
         </>
       )}
     </Stack.Navigator>

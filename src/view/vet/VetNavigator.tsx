@@ -1,6 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { View, Text, TouchableOpacity, StyleSheet, Image, ImageBackground } from 'react-native';
+import { useNavigation } from '@react-navigation/native'; // <-- NOVO IMPORT
 import { useAuth } from '../../control/AuthContext';
 
 import PerfilAnimaisScreen from './PerfilAnimaisScreen';
@@ -23,6 +24,7 @@ function LogoHeader() {
 
 function HomeScreen() {
   const { logout } = useAuth();
+  const navigation = useNavigation<any>(); // <-- INSTANCIANDO NAVEGAÇÃO
 
   return (
     <ImageBackground
@@ -30,15 +32,20 @@ function HomeScreen() {
       style={styles.background}
       resizeMode="cover"
     >
-      {}
       <View style={styles.overlay} />
 
-      {}
       <View style={styles.content}>
         <Text style={styles.welcome}>Bem-vindo ao ClyvoPet</Text>
         <Text style={styles.subtitle}>Sistema de gestão para clínica veterinária</Text>
 
-        {}
+        {/* NOVO BOTÃO: SOBRE O APP */}
+        <TouchableOpacity 
+          style={[styles.logoutButton, { backgroundColor: '#fff', marginBottom: 15 }]} 
+          onPress={() => navigation.navigate('Sobre')}
+        >
+          <Text style={[styles.logoutButtonText, { color: '#1e3a8a' }]}>Sobre o App</Text>
+        </TouchableOpacity>
+
         <TouchableOpacity style={styles.logoutButton} onPress={logout}>
           <Text style={styles.logoutButtonText}>Logout</Text>
         </TouchableOpacity>
@@ -121,7 +128,7 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   logoutButton: {
-    marginTop: 20,
+    marginTop: 10, // Ajustei um pouco o margin para ficar mais harmonioso com dois botões
     width: '80%',
     backgroundColor: '#b0c5ff',
     paddingVertical: 15,
