@@ -187,9 +187,9 @@ npm run android
 ## Backend
 -O backend do ClyvoPet foi desenvolvido em Java Spring Boot e está hospedado no Microsoft Azure App Service.
 
--Repositório do backend: https://github.com/isismodd/ChallengeJava3.git
+-Repositório do backend: https://github.com/isismodd/Sprint4-ClyvoPet
 
--URL da API: https://clyvo-pet-rm561497.azurewebsites.net
+-URL da API: clyvopet-rm561497.azurewebsites.net
 
 -Banco de dados: Oracle Database
 
@@ -201,5 +201,5 @@ Isis Macedo | RM 561497
 Henrique Pereira | RM 565608
 Rafael Carvalho Meireles | RM 563413
 
-**Link do vídeo no YouTube:** https://youtu.be/HKr7M8sSTo8
+**Link do vídeo no YouTube:** 
 **Link do Repositório:** https://github.com/isismodd/Challenge-MAD-V2.git
