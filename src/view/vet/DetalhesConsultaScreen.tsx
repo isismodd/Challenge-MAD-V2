@@ -1,19 +1,14 @@
 import React from 'react';
-import {
-  View, Text, StyleSheet, ScrollView, TouchableOpacity,
-  ActivityIndicator, Alert,
-} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import {
-  useConsulta,
-  useCancelarConsulta,
-  useFinalizarConsulta,
-} from '../../hooks/useConsultas';
+import { useConsulta, useCancelarConsulta, useFinalizarConsulta } from '../../hooks/useConsultas';
+import { useTheme } from '../../control/ThemeContext';
 
 export default function DetalhesConsultaScreen() {
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
   const consultaId = route.params?.id;
+  const { colors } = useTheme();
 
   const { data: consulta, isLoading, isError, refetch } = useConsulta(consultaId);
   const cancelarConsulta = useCancelarConsulta();
@@ -26,14 +21,10 @@ export default function DetalhesConsultaScreen() {
       {
         text: 'Sim',
         style: 'destructive',
-        onPress: () =>
-          cancelarConsulta.mutate(consulta, {
-            onSuccess: () => {
-              Alert.alert('Sucesso', 'Consulta cancelada!');
-              navigation.goBack();
-            },
-            onError: () => Alert.alert('Erro', 'Não foi possível cancelar.'),
-          }),
+        onPress: () => cancelarConsulta.mutate(consulta, {
+          onSuccess: () => { Alert.alert('Sucesso', 'Consulta cancelada!'); navigation.goBack(); },
+          onError: () => Alert.alert('Erro', 'Não foi possível cancelar.'),
+        }),
       },
     ]);
   };
@@ -44,32 +35,28 @@ export default function DetalhesConsultaScreen() {
       { text: 'Não', style: 'cancel' },
       {
         text: 'Sim',
-        onPress: () =>
-          finalizarConsulta.mutate(consulta, {
-            onSuccess: () => {
-              Alert.alert('Sucesso', 'Consulta finalizada!');
-              navigation.goBack();
-            },
-            onError: () => Alert.alert('Erro', 'Não foi possível finalizar.'),
-          }),
+        onPress: () => finalizarConsulta.mutate(consulta, {
+          onSuccess: () => { Alert.alert('Sucesso', 'Consulta finalizada!'); navigation.goBack(); },
+          onError: () => Alert.alert('Erro', 'Não foi possível finalizar.'),
+        }),
       },
     ]);
   };
 
   if (isLoading) {
     return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#1e3a8a" />
+      <View style={[styles.centered, { backgroundColor: colors.background }]}>
+        <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
   }
 
   if (isError || !consulta) {
     return (
-      <View style={styles.centered}>
-        <Text style={styles.errorText}>Erro ao carregar detalhes.</Text>
+      <View style={[styles.centered, { backgroundColor: colors.background }]}>
+        <Text style={[styles.errorText, { color: '#ef4444' }]}>Erro ao carregar detalhes.</Text>
         <TouchableOpacity onPress={() => refetch()}>
-          <Text style={styles.retryText}>Tentar novamente</Text>
+          <Text style={[styles.retryText, { color: colors.primary }]}>Tentar novamente</Text>
         </TouchableOpacity>
       </View>
     );
@@ -90,26 +77,26 @@ export default function DetalhesConsultaScreen() {
   };
 
   const Linha = ({ label, valor }: { label: string; valor: any }) => (
-    <View style={styles.linha}>
-      <Text style={styles.label}>{label}</Text>
-      <Text style={styles.valor}>{valor || '-'}</Text>
+    <View style={[styles.linha, { borderBottomColor: colors.border }]}>
+      <Text style={[styles.label, { color: colors.text }]}>{label}</Text>
+      <Text style={[styles.valor, { color: colors.textSecondary }]}>{valor || '-'}</Text>
     </View>
   );
 
   const agendada = consulta.status === 'AGENDADA';
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.title}>Detalhes da Consulta</Text>
+    <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
+      <Text style={[styles.title, { color: colors.primary }]}>Detalhes da Consulta</Text>
 
-      <View style={styles.card}>
+      <View style={[styles.card, { backgroundColor: colors.card }]}>
         <Linha label="ID" valor={consulta.id} />
         <Linha label="Animal" valor={consulta.animalNome} />
         <Linha label="Veterinário" valor={consulta.veterinarioNome} />
         <Linha label="Data e Hora" valor={formatarData(consulta.dataHora)} />
 
-        <View style={styles.linha}>
-          <Text style={styles.label}>Status</Text>
+        <View style={[styles.linha, { borderBottomColor: colors.border }]}>
+          <Text style={[styles.label, { color: colors.text }]}>Status</Text>
           <View style={[styles.statusBadge, { backgroundColor: getStatusColor(consulta.status) }]}>
             <Text style={styles.statusText}>{consulta.status}</Text>
           </View>
@@ -120,54 +107,48 @@ export default function DetalhesConsultaScreen() {
         <Linha label="Prescrição" valor={consulta.prescricao} />
       </View>
 
-      {}
       <View style={styles.actions}>
-       
-
-        <TouchableOpacity
-          style={styles.btnEditar}
-          onPress={() => navigation.navigate('EditarConsulta', { id: consulta.id })}
-        >
+        <TouchableOpacity style={[styles.btnEditar, { backgroundColor: colors.primary }]} onPress={() => navigation.navigate('EditarConsulta', { id: consulta.id })}>
           <Text style={styles.btnText}>Editar</Text>
         </TouchableOpacity>
 
-         {agendada && (
-          <TouchableOpacity style={styles.btnFinalizar} onPress={handleFinalizar}>
-            <Text style={styles.btnText}>Finalizar</Text>
+        {agendada && (
+          <TouchableOpacity style={[styles.btnFinalizar, { backgroundColor: colors.button }]} onPress={handleFinalizar}>
+            <Text style={[styles.btnText, { color: colors.buttonText }]}>Finalizar</Text>
           </TouchableOpacity>
         )}
 
         {agendada && (
-          <TouchableOpacity style={styles.btnCancelar} onPress={handleCancelar}>
-            <Text style={styles.btnText}>Cancelar</Text>
+          <TouchableOpacity style={[styles.btnCancelar, { backgroundColor: colors.button }]} onPress={handleCancelar}>
+            <Text style={[styles.btnText, { color: colors.buttonText }]}>Cancelar</Text>
           </TouchableOpacity>
         )}
       </View>
 
       <TouchableOpacity style={styles.btnVoltar} onPress={() => navigation.goBack()}>
-        <Text style={styles.btnVoltarText}>← Voltar</Text>
+        <Text style={[styles.btnVoltarText, { color: colors.primary }]}>← Voltar</Text>
       </TouchableOpacity>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f5f5f5', padding: 20 },
+  container: { flex: 1, padding: 20 },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  title: { fontSize: 24, fontWeight: 'bold', color: '#1e3a8a', marginBottom: 20, textAlign: 'center' },
-  card: { backgroundColor: '#fff', borderRadius: 12, padding: 15, elevation: 3, marginBottom: 20 },
-  linha: { flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: '#eee', paddingVertical: 10, alignItems: 'center' },
-  label: { flex: 1, fontWeight: 'bold', color: '#333' },
-  valor: { flex: 2, color: '#555' },
+  title: { fontSize: 24, fontWeight: 'bold', marginBottom: 20, textAlign: 'center' },
+  card: { borderRadius: 12, padding: 15, elevation: 3, marginBottom: 20 },
+  linha: { flexDirection: 'row', borderBottomWidth: 1, paddingVertical: 10, alignItems: 'center' },
+  label: { flex: 1, fontWeight: 'bold' },
+  valor: { flex: 2 },
   statusBadge: { paddingHorizontal: 12, paddingVertical: 5, borderRadius: 12 },
   statusText: { color: '#fff', fontWeight: 'bold', fontSize: 12 },
   actions: { flexDirection: 'row', gap: 10, marginBottom: 15 },
-  btnFinalizar: { backgroundColor: '#1e3a8a', padding: 15, borderRadius: 8, flex: 1, alignItems: 'center' },
-  btnEditar: { backgroundColor: '#3b82f6', padding: 15, borderRadius: 8, flex: 1, alignItems: 'center' },
-  btnCancelar: { backgroundColor: '#1e3a8a', padding: 15, borderRadius: 8, flex: 1, alignItems: 'center' },
-  btnText: { color: '#fff', fontWeight: 'bold', fontSize: 14 },
+  btnFinalizar: { padding: 15, borderRadius: 8, flex: 1, alignItems: 'center' },
+  btnEditar: { padding: 15, borderRadius: 8, flex: 1, alignItems: 'center' },
+  btnCancelar: { padding: 15, borderRadius: 8, flex: 1, alignItems: 'center' },
+  btnText: { fontWeight: 'bold', fontSize: 14 },
   btnVoltar: { padding: 15, alignItems: 'center', marginBottom: 30 },
-  btnVoltarText: { color: '#1e3a8a', fontWeight: 'bold', fontSize: 16 },
-  errorText: { color: '#ef4444', fontSize: 16, marginBottom: 10 },
-  retryText: { color: '#1e3a8a', fontWeight: 'bold' },
+  btnVoltarText: { fontWeight: 'bold', fontSize: 16 },
+  errorText: { fontSize: 16, marginBottom: 10 },
+  retryText: { fontWeight: 'bold' },
 });

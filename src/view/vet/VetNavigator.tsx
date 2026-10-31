@@ -1,8 +1,9 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { View, Text, TouchableOpacity, StyleSheet, Image, ImageBackground } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; // <-- NOVO IMPORT
+import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../control/AuthContext';
+import { useTheme } from '../../control/ThemeContext';
 
 import PerfilAnimaisScreen from './PerfilAnimaisScreen';
 import AgendaScreen from './AgendaScreen';
@@ -11,20 +12,26 @@ import SaudePreventivaScreen from './SaudePreventivaScreen';
 const Tab = createBottomTabNavigator();
 
 function LogoHeader() {
+  const { toggleTheme, theme, colors } = useTheme();
+
   return (
-    <View style={styles.headerContainer}>
+    <View style={[styles.headerContainer, { backgroundColor: colors.header }]}>
       <Image
         source={require('../../../assets/clyvoLogo.png')}
         style={styles.logo}
         resizeMode="contain"
       />
+      <TouchableOpacity onPress={toggleTheme} style={styles.themeButton}>
+        <Text style={styles.themeIcon}>{theme === 'light' ? '🌙' : '☀️'}</Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
 function HomeScreen() {
   const { logout } = useAuth();
-  const navigation = useNavigation<any>(); // <-- INSTANCIANDO NAVEGAÇÃO
+  const navigation = useNavigation<any>();
+  const { colors } = useTheme();
 
   return (
     <ImageBackground
@@ -33,21 +40,19 @@ function HomeScreen() {
       resizeMode="cover"
     >
       <View style={styles.overlay} />
-
       <View style={styles.content}>
         <Text style={styles.welcome}>Bem-vindo ao ClyvoPet</Text>
         <Text style={styles.subtitle}>Sistema de gestão para clínica veterinária</Text>
 
-        {/* NOVO BOTÃO: SOBRE O APP */}
         <TouchableOpacity 
-          style={[styles.logoutButton, { backgroundColor: '#fff', marginBottom: 15 }]} 
+          style={[styles.logoutButton, { backgroundColor: colors.card, marginBottom: 15 }]} 
           onPress={() => navigation.navigate('Sobre')}
         >
-          <Text style={[styles.logoutButtonText, { color: '#1e3a8a' }]}>Sobre o App</Text>
+          <Text style={[styles.logoutButtonText, { color: colors.primary }]}>Sobre o App</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.logoutButton} onPress={logout}>
-          <Text style={styles.logoutButtonText}>Logout</Text>
+        <TouchableOpacity style={[styles.logoutButton, { backgroundColor: colors.card }]} onPress={logout}>
+          <Text style={[styles.logoutButtonText, { color: colors.primary }]}>Logout</Text>
         </TouchableOpacity>
       </View>
     </ImageBackground>
@@ -55,49 +60,56 @@ function HomeScreen() {
 }
 
 export default function VetNavigator() {
+  const { colors } = useTheme();
+
   return (
     <Tab.Navigator
       screenOptions={{
         headerShown: true,
         header: () => <LogoHeader />,
         headerStyle: {
-          backgroundColor: '#2359D4',
+          backgroundColor: colors.header,
           elevation: 0,
           shadowOpacity: 0,
         },
-        tabBarActiveTintColor: '#2359D4',
-        tabBarInactiveTintColor: '#999',
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.textSecondary,
         tabBarStyle: {
-          backgroundColor: '#fff',
+          backgroundColor: colors.card,
+          borderTopColor: colors.border,
           paddingBottom: 29,
           paddingTop: 5,
           height: 97,
         },
       }}
     >
-      <Tab.Screen name="Início" component={HomeScreen}
-        options={{ tabBarIcon: () => <Text style={{ fontSize: 22 }}>🏠</Text> }} />
-      <Tab.Screen name="Animais" component={PerfilAnimaisScreen}
-        options={{ tabBarIcon: () => <Text style={{ fontSize: 22 }}>🐕</Text> }} />
-      <Tab.Screen name="Agenda" component={AgendaScreen}
-        options={{ tabBarIcon: () => <Text style={{ fontSize: 22 }}>📅</Text> }} />
-      <Tab.Screen name="Saúde" component={SaudePreventivaScreen}
-        options={{ tabBarIcon: () => <Text style={{ fontSize: 22 }}>🔔</Text> }} />
+      <Tab.Screen name="Início" component={HomeScreen} options={{ tabBarIcon: () => <Text style={{ fontSize: 22 }}>🏠</Text> }} />
+      <Tab.Screen name="Animais" component={PerfilAnimaisScreen} options={{ tabBarIcon: () => <Text style={{ fontSize: 22 }}>🐕</Text> }} />
+      <Tab.Screen name="Agenda" component={AgendaScreen} options={{ tabBarIcon: () => <Text style={{ fontSize: 22 }}>📅</Text> }} />
+      <Tab.Screen name="Saúde" component={SaudePreventivaScreen} options={{ tabBarIcon: () => <Text style={{ fontSize: 22 }}>🔔</Text> }} />
     </Tab.Navigator>
   );
 }
 
 const styles = StyleSheet.create({
   headerContainer: {
-    backgroundColor: '#2359D4',
     paddingVertical: 15,
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
+    flexDirection: 'row',
   },
   logo: {
     width: 160,
     height: 50,
+  },
+  themeButton: {
+    position: 'absolute',
+    right: 20,
+    padding: 10,
+  },
+  themeIcon: {
+    fontSize: 24,
   },
   background: {
     flex: 1,
@@ -128,16 +140,14 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   logoutButton: {
-    marginTop: 10, // Ajustei um pouco o margin para ficar mais harmonioso com dois botões
+    marginTop: 10,
     width: '80%',
-    backgroundColor: '#b0c5ff',
     paddingVertical: 15,
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },
   logoutButtonText: {
-    color: '#112942',      
     fontWeight: 'bold',
     fontSize: 16,
   },
