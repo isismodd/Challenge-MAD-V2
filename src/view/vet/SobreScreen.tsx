@@ -4,24 +4,27 @@ import { useNavigation } from '@react-navigation/native';
 import Constants from 'expo-constants';
 import { useTheme } from '../../control/ThemeContext';
 
-const COMMIT_HASH = "PENDENTE_PUBLICACAO_FIREBASE";
+const COMMIT_HASH = "placeholder-firebase";
 
 export default function SobreScreen() {
   const navigation = useNavigation<any>();
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
 
   return (
     <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={[styles.card, { backgroundColor: colors.card }]}>
         <View style={styles.logoContainer}>
           <Image
-            source={require('../../../assets/clyvoLogo.png')}
+            source={
+              theme === 'dark'
+                ? require('../../../assets/clyvoLogoB.png')
+                : require('../../../assets/clyvoLogo.png')
+            }
             style={styles.logo}
             resizeMode="contain"
           />
         </View>
 
-        <Text style={[styles.title, { color: colors.primary }]}>ClyvoPet</Text>
         <Text style={[styles.subtitle, { color: colors.textSecondary }]}>Sistema de gestão para clínica veterinária</Text>
 
         <View style={[styles.divider, { backgroundColor: colors.border }]} />
@@ -49,9 +52,6 @@ export default function SobreScreen() {
               {COMMIT_HASH}
             </Text>
           </View>
-          <Text style={[styles.hint, { color: colors.textSecondary }]}>
-            Este hash identifica exatamente a versão do código-fonte que gerou este aplicativo.
-          </Text>
         </View>
 
         <View style={[styles.divider, { backgroundColor: colors.border }]} />

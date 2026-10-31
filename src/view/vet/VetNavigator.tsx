@@ -17,7 +17,11 @@ function LogoHeader() {
   return (
     <View style={[styles.headerContainer, { backgroundColor: colors.header }]}>
       <Image
-        source={require('../../../assets/clyvoLogo.png')}
+        source={
+          theme === 'dark'
+            ? require('../../../assets/clyvoLogoB.png') 
+            : require('../../../assets/clyvoLogo.png')
+        }
         style={styles.logo}
         resizeMode="contain"
       />
