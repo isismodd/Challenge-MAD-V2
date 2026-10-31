@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, 
 import { useNavigation } from '@react-navigation/native';
 import { useConsultas, useCancelarConsulta, useFinalizarConsulta, useEnviarLembrete } from '../../hooks/useConsultas';
 import { useTheme } from '../../control/ThemeContext';
+import { useNotificacao } from '../../hooks/useNotificacao';
 
 export default function AgendaScreen() {
   const navigation = useNavigation<any>();
@@ -11,6 +12,7 @@ export default function AgendaScreen() {
   const finalizarConsulta = useFinalizarConsulta();
   const enviarLembrete = useEnviarLembrete();
   const { colors } = useTheme();
+  const { notificar } = useNotificacao();
 
   const consultas = Array.isArray(consultasData) ? consultasData : [];
 
@@ -21,7 +23,11 @@ export default function AgendaScreen() {
         text: 'Sim',
         style: 'destructive',
         onPress: () => cancelarConsulta.mutate(consulta, {
-          onSuccess: () => { Alert.alert('Sucesso', 'Consulta cancelada!'); refetch(); },
+          onSuccess: () => { 
+            Alert.alert('Sucesso', 'Consulta cancelada!'); 
+            notificar('Consulta Cancelada ❌', 'A consulta foi cancelada com sucesso.');
+            refetch(); 
+          },
           onError: () => Alert.alert('Erro', 'Não foi possível cancelar.'),
         }),
       },
@@ -34,7 +40,11 @@ export default function AgendaScreen() {
       {
         text: 'Sim',
         onPress: () => finalizarConsulta.mutate(consulta, {
-          onSuccess: () => { Alert.alert('Sucesso', 'Consulta finalizada!'); refetch(); },
+          onSuccess: () => { 
+            Alert.alert('Sucesso', 'Consulta finalizada!'); 
+            notificar('Consulta Finalizada ✅', `A consulta do animal ${consulta.animalNome} foi concluída.`);
+            refetch(); 
+          },
           onError: () => Alert.alert('Erro', 'Não foi possível finalizar.'),
         }),
       },
@@ -47,7 +57,10 @@ export default function AgendaScreen() {
       {
         text: 'Enviar',
         onPress: () => enviarLembrete.mutate(id, {
-          onSuccess: () => Alert.alert('Sucesso', 'Lembrete enviado!'),
+          onSuccess: () => { 
+            Alert.alert('Sucesso', 'Lembrete enviado!'); 
+            notificar('Lembrete Enviado 📧', 'O e-mail com o lembrete foi disparado para o tutor.');
+          },
           onError: () => Alert.alert('Erro', 'Não foi possível enviar o lembrete.'),
         }),
       },

@@ -7,12 +7,14 @@ import { useVeterinarios } from '../../hooks/useVeterinarios';
 import { useCriarConsulta, useAtualizarConsulta } from '../../hooks/useConsultas';
 import { ConsultaPayload } from '../../services/consultaService';
 import { useTheme } from '../../control/ThemeContext';
+import { useNotificacao } from '../../hooks/useNotificacao';
 
 export default function CadastroConsultaScreen() {
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
   const { user } = useAuth(); 
   const { colors } = useTheme();
+  const { notificar } = useNotificacao();
 
   const consultaId = route.params?.id;
   const isEdicao = !!consultaId;
@@ -64,13 +66,21 @@ export default function CadastroConsultaScreen() {
       atualizarConsulta.mutate(
         { id: consultaId, consulta: form },
         {
-          onSuccess: () => { Alert.alert('Sucesso', 'Consulta atualizada!'); navigation.goBack(); },
+          onSuccess: () => { 
+            Alert.alert('Sucesso', 'Consulta atualizada!'); 
+            notificar('Consulta Atualizada 📅', 'Os detalhes da consulta foram modificados.');
+            navigation.goBack(); 
+          },
           onError: () => Alert.alert('Erro', 'Não foi possível atualizar.'),
         }
       );
     } else {
       criarConsulta.mutate(form, {
-        onSuccess: () => { Alert.alert('Sucesso', 'Consulta agendada!'); navigation.goBack(); },
+        onSuccess: () => { 
+          Alert.alert('Sucesso', 'Consulta agendada!'); 
+          notificar('Consulta Agendada 🩺', 'Uma nova consulta foi adicionada à sua agenda.');
+          navigation.goBack(); 
+        },
         onError: () => Alert.alert('Erro', 'Não foi possível agendar.'),
       });
     }

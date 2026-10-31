@@ -3,14 +3,16 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert,
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useCriarAnimal, useAtualizarAnimal, useAnimal } from '../../hooks/useAnimais';
 import { AnimalPayload } from '../../services/animalService';
-import { useTheme } from '../../control/ThemeContext'; // <-- IMPORT
+import { useTheme } from '../../control/ThemeContext';
+import { useNotificacao } from '../../hooks/useNotificacao';
 
 export default function CadastroAnimalScreen() {
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
   const animalId = route.params?.id;
   const isEdicao = !!animalId;
-  const { colors } = useTheme(); // <-- HOOK
+  const { colors } = useTheme();
+  const { notificar } = useNotificacao();
 
   const { data: animalExistente, isLoading: isLoadingAnimal } = useAnimal(animalId);
   const criarAnimal = useCriarAnimal();
@@ -48,13 +50,21 @@ export default function CadastroAnimalScreen() {
       atualizarAnimal.mutate(
         { id: animalId, animal: form },
         {
-          onSuccess: () => { Alert.alert('Sucesso', 'Animal atualizado!'); navigation.goBack(); },
+          onSuccess: () => { 
+            Alert.alert('Sucesso', 'Animal atualizado!'); 
+            notificar('Pet Atualizado 🐾', `Os dados de ${form.nome} foram atualizados.`);
+            navigation.goBack(); 
+          },
           onError: () => Alert.alert('Erro', 'Não foi possível atualizar.'),
         }
       );
     } else {
       criarAnimal.mutate(form, {
-        onSuccess: () => { Alert.alert('Sucesso', 'Animal cadastrado!'); navigation.goBack(); },
+        onSuccess: () => { 
+          Alert.alert('Sucesso', 'Animal cadastrado!'); 
+          notificar('Novo Pet Cadastrado 🐶', `${form.nome} foi adicionado ao sistema.`);
+          navigation.goBack(); 
+        },
         onError: () => Alert.alert('Erro', 'Não foi possível cadastrar.'),
       });
     }

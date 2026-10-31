@@ -3,12 +3,14 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useAnimal, useDeletarAnimal } from '../../hooks/useAnimais';
 import { useTheme } from '../../control/ThemeContext';
+import { useNotificacao } from '../../hooks/useNotificacao'; 
 
 export default function DetalhesAnimalScreen() {
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
   const animalId = route.params?.id;
   const { colors } = useTheme();
+  const { notificar } = useNotificacao(); 
 
   const { data: animal, isLoading, isError, refetch } = useAnimal(animalId);
   const deletarAnimal = useDeletarAnimal();
@@ -22,6 +24,7 @@ export default function DetalhesAnimalScreen() {
         onPress: () => deletarAnimal.mutate(animalId, {
           onSuccess: () => {
             Alert.alert('Sucesso', 'Animal excluído!');
+            notificar('Pet Excluído 🗑️', `O cadastro de ${animal?.nome} foi removido do sistema.`); // <-- Adicionado
             navigation.goBack();
           },
           onError: () => Alert.alert('Erro', 'Não foi possível excluir.'),

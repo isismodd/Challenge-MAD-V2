@@ -3,12 +3,14 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useConsulta, useCancelarConsulta, useFinalizarConsulta } from '../../hooks/useConsultas';
 import { useTheme } from '../../control/ThemeContext';
+import { useNotificacao } from '../../hooks/useNotificacao';
 
 export default function DetalhesConsultaScreen() {
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
   const consultaId = route.params?.id;
   const { colors } = useTheme();
+  const { notificar } = useNotificacao();
 
   const { data: consulta, isLoading, isError, refetch } = useConsulta(consultaId);
   const cancelarConsulta = useCancelarConsulta();
@@ -22,7 +24,11 @@ export default function DetalhesConsultaScreen() {
         text: 'Sim',
         style: 'destructive',
         onPress: () => cancelarConsulta.mutate(consulta, {
-          onSuccess: () => { Alert.alert('Sucesso', 'Consulta cancelada!'); navigation.goBack(); },
+          onSuccess: () => { 
+            Alert.alert('Sucesso', 'Consulta cancelada!'); 
+            notificar('Consulta Cancelada ❌', 'A consulta foi cancelada com sucesso.');
+            navigation.goBack(); 
+          },
           onError: () => Alert.alert('Erro', 'Não foi possível cancelar.'),
         }),
       },
@@ -36,7 +42,11 @@ export default function DetalhesConsultaScreen() {
       {
         text: 'Sim',
         onPress: () => finalizarConsulta.mutate(consulta, {
-          onSuccess: () => { Alert.alert('Sucesso', 'Consulta finalizada!'); navigation.goBack(); },
+          onSuccess: () => { 
+            Alert.alert('Sucesso', 'Consulta finalizada!'); 
+            notificar('Consulta Finalizada ✅', 'O atendimento foi concluído com sucesso.');
+            navigation.goBack(); 
+          },
           onError: () => Alert.alert('Erro', 'Não foi possível finalizar.'),
         }),
       },
