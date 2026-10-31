@@ -3,8 +3,7 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'rea
 import { useNavigation } from '@react-navigation/native';
 import Constants from 'expo-constants';
 
-// ⚠️ AQUI VOCÊ VAI COLOCAR O HASH DO COMMIT QUANDO FOR GERAR O APK FINAL PARA O FIREBASE
-const COMMIT_HASH = "PENDENTE_PUBLICACAO_FIREBASE"; 
+const COMMIT_HASH = "placeholder-firebase"; 
 
 export default function SobreScreen() {
   const navigation = useNavigation<any>();
@@ -13,7 +12,7 @@ export default function SobreScreen() {
     <ScrollView style={styles.container}>
       <View style={styles.card}>
         
-        {/* Logo do App */}
+        {}
         <View style={styles.logoContainer}>
           <Image
             source={require('../../../assets/clyvoLogo.png')}
@@ -22,12 +21,11 @@ export default function SobreScreen() {
           />
         </View>
 
-        <Text style={styles.title}>ClyvoPet</Text>
         <Text style={styles.subtitle}>Sistema de gestão para clínica veterinária</Text>
 
         <View style={styles.divider} />
 
-        {/* Informações Técnicas */}
+        {}
         <View style={styles.infoRow}>
           <Text style={styles.label}>Versão do App:</Text>
           <Text style={styles.value}>
@@ -44,7 +42,7 @@ export default function SobreScreen() {
 
         <View style={styles.divider} />
 
-        {/* Hash do Commit - Requisito Obrigatório da Sprint */}
+        {}
         <View style={styles.hashContainer}>
           <Text style={styles.label}>Hash do Commit (Versão Publicada):</Text>
           <View style={styles.hashBox}>
@@ -57,7 +55,7 @@ export default function SobreScreen() {
           </Text>
         </View>
 
-        {/* Desenvolvedores */}
+        {}
         <View style={styles.divider} />
         <Text style={styles.sectionTitle}>Desenvolvido por:</Text>
         <Text style={styles.devText}>Ana Clara de Oliveira Nascimento</Text>

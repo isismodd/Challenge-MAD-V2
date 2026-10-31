@@ -12,7 +12,7 @@ import CadastroAnimalScreen from '../../view/vet/CadastroAnimalScreen';
 import DetalhesAnimalScreen from '../../view/vet/DetalhesAnimalScreen';
 import CadastroConsultaScreen from '../../view/vet/CadastroConsultaScreen';
 import DetalhesConsultaScreen from '../../view/vet/DetalhesConsultaScreen';
-import SobreScreen from '../../view/vet/SobreScreen'; // <-- NOVO IMPORT
+import SobreScreen from '../../view/vet/SobreScreen'; 
 
 const Stack = createStackNavigator();
 const queryClient = new QueryClient({
@@ -51,8 +51,7 @@ function AppNavigator() {
             options={{ headerShown: true, title: 'Editar Consulta' }} />
           <Stack.Screen name="DetalhesConsulta" component={DetalhesConsultaScreen}
             options={{ headerShown: true, title: 'Detalhes da Consulta' }} />
-          
-          {/* NOVA ROTA AQUI */}
+          {}
           <Stack.Screen name="Sobre" component={SobreScreen}
             options={{ headerShown: true, title: 'Sobre o App' }} />
         </>
