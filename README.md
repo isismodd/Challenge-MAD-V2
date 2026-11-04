@@ -104,7 +104,8 @@ Challenge-MAD-V2/
 | :--- | :--- |
 | **Login** | Autenticação do veterinário |
 | **Cadastro** | Cadastro de novo veterinário |
-| **Início** | Boas-vindas + logout |
+| **Início** | Boas-vindas + logout + sobre |
+| **Sobre** | Hash do commit + Versão do app + Equipe |
 | **Animais** | Lista de animais com botões: Visualizar, Editar, Excluir |
 | **Detalhes do Animal** | Tabela com todos os dados do animal + Editar/Excluir/Voltar |
 | **Cadastro/Editar Animal** | Formulário com labels + campos validados |
@@ -202,5 +203,5 @@ Isis Macedo | RM 561497
 Henrique Pereira | RM 565608
 Rafael Carvalho Meireles | RM 563413
 
-**Link do vídeo no YouTube:** 
+**Link do vídeo no YouTube:** https://youtu.be/IqMA411SPO8
 **Link do Repositório:** https://github.com/isismodd/Challenge-MAD-V2.git
